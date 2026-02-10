@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+* {
+  @apply max-w-full;
+}
+
+html, body {
+  @apply overflow-x-hidden;
+}

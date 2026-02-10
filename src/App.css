@@ -1,0 +1,109 @@
+/* Profile Page Animations */
+
+/* Right-side slide in animation for profile */
+.profile-slide-in {
+  will-change: transform, opacity;
+}
+
+.alert-slide-in {
+  will-change: transform, opacity;
+}
+
+.info-slide-in {
+  will-change: transform, opacity;
+}
+
+/* Profile Card Modal Animations */
+.profile-backdrop {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+/* Mobile Bottom Sheet Animation */
+@media (max-width: 768px) {
+  .profile-card-modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 80vh;
+    z-index: 50;
+  }
+}
+
+/* Desktop Dropdown Animation */
+@media (min-width: 769px) {
+  .profile-card-modal {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 320px;
+    max-width: 360px;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Responsive container adjustments */
+@media (max-width: 768px) {
+  .profile-slide-in {
+    padding-left: 0;
+  }
+
+  .info-slide-in {
+    margin-top: 1rem;
+  }
+}
+
+/* Smooth transitions for buttons */
+button {
+  transition: all 0.3s ease;
+}
+
+/* Enhanced button hover states */
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Mobile-friendly text sizing */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+  }
+
+  p {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure proper stacking context for animations */
+.profile-slide-in,
+.alert-slide-in,
+.info-slide-in {
+  position: relative;
+  z-index: 1;
+}
+
+/* Animation performance optimization */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
