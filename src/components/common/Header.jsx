@@ -1,13 +1,14 @@
-import { ShoppingCart, Heart, Search, Menu, X, LogOut, User } from 'lucide-react';
+import { ShoppingCart, Heart, Search, Menu, X, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useWishlist } from '../../context api/WishlistContext';
 import { useCart } from '../../context api/CartContext';
 import { useAuth } from '../../context api/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { RENTAL_ITEMS } from '../../data/productsData';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -16,6 +17,13 @@ export default function Header() {
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  // Scroll listener for glassmorphism header
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Generate suggestions based on query
   useEffect(() => {
@@ -75,23 +83,35 @@ export default function Header() {
     }
   };
 
+  // Safe display name — handles missing displayName from Google/Firebase
+  const displayName = user?.fullName || user?.displayName || user?.email?.split('@')[0] || 'User';
+
+  // Active NavLink style helper
+  const navLinkClass = ({ isActive }) =>
+    `text-sm font-medium transition ${
+      isActive ? 'text-purple-600 font-bold' : 'text-gray-700 hover:text-purple-600'
+    }`;
+
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+      scrolled ? 'bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-100' : 'bg-white shadow-md'
+    }`}>
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">C</span>
+        <NavLink to="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-purple-300 transition-shadow">
+            <span className="text-white font-bold text-xl">W</span>
           </div>
-          <span className="text-2xl font-bold text-gray-900">CLOTHONRENT</span>
-        </div>
+          <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">WardroWave</span>
+        </NavLink>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 items-center">
-          <a href="/" className="text-gray-700 hover:text-purple-600 transition font-medium">Home</a>
-          <a href="/rentals" className="text-gray-700 hover:text-purple-600 transition font-medium">Rent Clothes</a>
-          <a href="/about" className="text-gray-700 hover:text-purple-600 transition font-medium">About</a>
-          <a href="/contact" className="text-gray-700 hover:text-purple-600 transition font-medium">Contact</a>
+          <NavLink to="/" end className={navLinkClass}>Home</NavLink>
+          <NavLink to="/discover" className={navLinkClass}>Discover</NavLink>
+          <NavLink to="/rentals" className={navLinkClass}>Rent Clothes</NavLink>
+          <NavLink to="/about" className={navLinkClass}>About</NavLink>
+          <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
         </div>
 
         {/* Search Bar */}
@@ -180,9 +200,9 @@ export default function Header() {
                 className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full hover:bg-slate-100 transition"
               >
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                  {user.fullName.charAt(0).toUpperCase()}
+                  {displayName.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-medium text-gray-700">{user.fullName.split(' ')[0]}</span>
+                <span className="text-sm font-medium text-gray-700">{displayName.split(' ')[0]}</span>
               </button>
             </div>
           ) : (
@@ -215,18 +235,19 @@ export default function Header() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 py-4 px-6">
-          <a href="/" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium">Home</a>
-          <a href="/rentals" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium">Rent Clothes</a>
-          <a href="/wishlist" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium flex items-center gap-2">
+          <NavLink to="/" end className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium" onClick={() => setIsOpen(false)}>Home</NavLink>
+          <NavLink to="/discover" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium" onClick={() => setIsOpen(false)}>Discover</NavLink>
+          <NavLink to="/rentals" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium" onClick={() => setIsOpen(false)}>Rent Clothes</NavLink>
+          <NavLink to="/wishlist" className="flex items-center gap-2 py-2 text-gray-700 hover:text-purple-600 transition font-medium" onClick={() => setIsOpen(false)}>
             Wishlist
             {wishlistCount > 0 && (
               <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {wishlistCount}
               </span>
             )}
-          </a>
-          <a href="/about" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium">About</a>
-          <a href="/contact" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium">Contact</a>
+          </NavLink>
+          <NavLink to="/about" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium" onClick={() => setIsOpen(false)}>About</NavLink>
+          <NavLink to="/contact" className="block py-2 text-gray-700 hover:text-purple-600 transition font-medium" onClick={() => setIsOpen(false)}>Contact</NavLink>
           
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="relative mb-4" ref={searchRef}>
@@ -283,8 +304,8 @@ export default function Header() {
             {user ? (
               <div className="space-y-2">
                 <div className="px-3 py-2 rounded-lg bg-slate-50">
-                  <p className="font-semibold text-gray-900">{user.fullName}</p>
-                  <p className="text-xs text-gray-600">{user.email}</p>
+                  <p className="font-semibold text-gray-900">{displayName}</p>
+                  <p className="text-xs text-gray-600">{user.email || ''}</p>
                 </div>
                 <button
                   onClick={() => {

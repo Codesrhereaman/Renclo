@@ -1,47 +1,98 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import api from '../utils/api';
+import { useAuth } from './AuthContext';
+import toast from 'react-hot-toast';
 
 const WishlistContext = createContext();
 
 export function WishlistProvider({ children }) {
-  const [wishlist, setWishlist] = useState(() => {
-    // Load wishlist from localStorage on initial render
-    const saved = localStorage.getItem('wishlist');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [wishlist, setWishlist] = useState([]);
+  const { isAuthenticated } = useAuth();
 
-  // Save to localStorage whenever wishlist changes
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+    if (isAuthenticated) {
+      fetchWishlist();
+    } else {
+      setWishlist([]);
+    }
+  }, [isAuthenticated]);
 
-  const addToWishlist = (item) => {
-    setWishlist(prev => {
-      // Check if item already exists
-      if (prev.find(i => i.id === item.id)) {
-        return prev;
-      }
-      return [...prev, item];
-    });
+  const fetchWishlist = async () => {
+    try {
+      const res = await api.wishlist.get();
+      // map productId to id for frontend compatibility
+      const mappedItems = (res.data.items || []).map(item => ({ ...item, id: item.productId }));
+      setWishlist(mappedItems);
+    } catch (err) {
+      console.error('Failed to fetch wishlist', err);
+    }
   };
 
-  const removeFromWishlist = (itemId) => {
+  const addToWishlist = async (item) => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to manage your wishlist.', { id: 'wishlist-auth' });
+      return;
+    }
+
+    setWishlist(prev => {
+      if (prev.find(i => i.id === item.id)) return prev;
+      return [...prev, { ...item, id: item.id }];
+    });
+
+    try {
+      await api.wishlist.add(item.id);
+    } catch (err) {
+      console.error(err);
+      fetchWishlist(); // Revert on failure
+    }
+  };
+
+  const removeFromWishlist = async (itemId) => {
+    if (!isAuthenticated) return;
+
     setWishlist(prev => prev.filter(item => item.id !== itemId));
+    
+    try {
+      await api.wishlist.remove(itemId);
+    } catch (err) {
+      console.error(err);
+      fetchWishlist(); // Revert on failure
+    }
   };
 
   const isInWishlist = (itemId) => {
     return wishlist.some(item => item.id === itemId);
   };
 
-  const toggleWishlist = (item) => {
+  const toggleWishlist = async (item) => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to manage your wishlist.', { id: 'wishlist-auth' });
+      return;
+    }
+
     if (isInWishlist(item.id)) {
-      removeFromWishlist(item.id);
+      setWishlist(prev => prev.filter(i => i.id !== item.id));
     } else {
-      addToWishlist(item);
+      setWishlist(prev => [...prev, { ...item, id: item.id }]);
+    }
+
+    try {
+      await api.wishlist.toggle(item.id);
+    } catch (err) {
+      console.error(err);
+      fetchWishlist(); // Revert on failure
     }
   };
 
-  const clearWishlist = () => {
+  const clearWishlist = async () => {
+    if (!isAuthenticated) return;
     setWishlist([]);
+    try {
+      await api.wishlist.clear();
+    } catch (err) {
+      console.error(err);
+      fetchWishlist(); // Revert on failure
+    }
   };
 
   return (

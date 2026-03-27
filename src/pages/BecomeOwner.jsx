@@ -1,4 +1,4 @@
-import { 
+﻿import { 
   Upload, DollarSign, Shield, QrCode, TrendingUp, Clock, 
   CheckCircle, ArrowRight, Package, BarChart3 
 } from 'lucide-react';
@@ -84,7 +84,7 @@ export default function BecomeOwner() {
 
   const stats = [
     { label: 'Active Owners', value: '2,500+', icon: TrendingUp },
-    { label: 'Avg. Monthly Earnings', value: '₹15,000', icon: DollarSign },
+    { label: 'Avg. Monthly Earnings', value: 'â‚¹15,000', icon: DollarSign },
     { label: 'Items Listed', value: '50,000+', icon: Package },
     { label: 'Avg. Response Time', value: '< 2 hrs', icon: Clock }
   ];
@@ -132,7 +132,7 @@ export default function BecomeOwner() {
             Why Partner With Us?
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            CLOTHONRENT provides everything you need to earn from your wardrobe safely and efficiently
+            WardroWave provides everything you need to earn from your wardrobe safely and efficiently
           </p>
         </div>
 

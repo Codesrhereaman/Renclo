@@ -11,30 +11,62 @@ import InventorySearch from '../components/dashboard/InventorySearch';
 import UploadItemForm from '../components/owner/UploadItemForm';
 import QRCodeModal from '../components/owner/QRCodeModal';
 import { BarChart3, Package, DollarSign, TrendingUp } from 'lucide-react';
-
-const OWNER_INVENTORY = [
-  { id: 1, name: 'Premium Blazer', category: 'men', price: 2499, rentalPrice: 599, rented: 15, earnings: 8985, qr: 'QR001' },
-  { id: 2, name: 'Designer Saree', category: 'women', price: 3499, rentalPrice: 899, rented: 23, earnings: 20677, qr: 'QR002' },
-  { id: 3, name: 'Casual Shirt', category: 'men', price: 899, rentalPrice: 249, rented: 8, earnings: 1992, qr: 'QR003' },
-];
+import api from '../utils/api';
+import toast from 'react-hot-toast';
 
 export default function OwnerDashboard() {
-  const [inventory, setInventory] = useState(OWNER_INVENTORY);
+  const [inventory, setInventory] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [activities, setActivities] = useState([]);
+  const [pendingPayout, setPendingPayout] = useState(0);
 
   useEffect(() => {
     initOwnerDashboardAnimations();
+    fetchInventory();
   }, []);
 
-  const totalEarnings = inventory.reduce((sum, item) => sum + item.earnings, 0);
-  const totalRentals = inventory.reduce((sum, item) => sum + item.rented, 0);
+  const fetchInventory = async () => {
+    try {
+      const [invRes, actRes] = await Promise.all([
+        api.product.getMyProducts(),
+        api.order.getOwnerActivities()
+      ]);
+      setInventory(invRes.data?.products || invRes.products || []);
+      setActivities(actRes.data?.activities || actRes.activities || []);
+      setPendingPayout(actRes.data?.pendingPayout || actRes.pendingPayout || 0);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const totalEarnings = inventory.reduce((sum, item) => sum + (item.totalEarnings || 0), 0);
+  const totalRentals = inventory.reduce((sum, item) => sum + (item.totalRentals || 0), 0);
   const totalItems = inventory.length;
 
-  const handleAddItem = (newItem) => {
-    setInventory(prev => [...prev, newItem]);
+  const handleAddItem = async (newItem) => {
+    try {
+      const productPayload = {
+        name: newItem.name,
+        category: newItem.category,
+        description: newItem.description,
+        originalPrice: Number(newItem.originalPrice),
+        rentalPrice: Number(newItem.rentalPrice),
+        stockQuantity: 1,
+        images: [{ url: newItem.image, isPrimary: true }]
+      };
+      await api.product.create(productPayload);
+      toast.success('Product listed successfully!');
+      fetchInventory();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to upload product. Please try again.');
+    }
   };
 
   const handleViewQR = (item) => {
@@ -42,10 +74,36 @@ export default function OwnerDashboard() {
     setShowQRModal(true);
   };
 
-  const handleDeleteItem = (itemId) => {
-    if (window.confirm('Are you sure you want to delete this item?')) {
-      setInventory(prev => prev.filter(item => item.id !== itemId));
-    }
+  const handleDeleteItem = async (itemId) => {
+    // Custom toast confirm instead of window.confirm()
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium">Delete this product?</p>
+          <div className="flex gap-2">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  await api.product.delete(itemId);
+                  setInventory(prev => prev.filter(item => item.id !== itemId));
+                  toast.success('Product removed.');
+                } catch (err) {
+                  console.error(err);
+                  toast.error('Failed to delete product.');
+                }
+              }}
+              className="px-3 py-1 bg-red-500 text-white text-sm rounded-lg"
+            >Delete</button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-lg"
+            >Cancel</button>
+          </div>
+        </div>
+      ),
+      { duration: 10000 }
+    );
   };
 
   return (
@@ -98,8 +156,8 @@ export default function OwnerDashboard() {
 
         {/* Performance Chart */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-          <RecentActivity />
-          <PayoutInfo totalEarnings={totalEarnings} />
+          <RecentActivity activities={activities} />
+          <PayoutInfo totalEarnings={totalEarnings} pendingPayout={pendingPayout} />
         </div>
       </div>
 

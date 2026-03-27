@@ -5,9 +5,7 @@ import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import { useCart } from "../context api/CartContext";
 import { useWishlist } from "../context api/WishlistContext";
-import { getMenProducts } from "../data/productsData";
-
-const menItems = getMenProducts();
+import api from "../utils/api";
 
 function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate();
@@ -90,6 +88,19 @@ export default function MenCategory() {
   const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState("trending");
   const [priceRange, setPriceRange] = useState(1000);
+  const [menItems, setMenItems] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.product.getAll({ category: "men" });
+        setMenItems(res.data?.products || res.products || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product) => {
     addToCart({

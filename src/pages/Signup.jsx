@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import {
   Eye,
   EyeOff,
@@ -92,9 +92,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      signup(
+      await signup(
         formData.fullName,
         formData.email,
         formData.phone,
@@ -112,44 +110,30 @@ export default function Signup() {
     }
   };
 
-  const handleGoogleSignup = () => {
+  const handleGoogleSignup = async () => {
     setLoading(true);
-    // Simulate Google OAuth
-    setTimeout(() => {
-      const mockGoogleUser = {
-        email: `user_${Date.now()}@gmail.com`,
-        fullName: "Google User",
-        photoUrl: "https://via.placeholder.com/150",
-      };
-      socialLogin(
-        "google",
-        mockGoogleUser.email,
-        mockGoogleUser.fullName,
-        mockGoogleUser.photoUrl
-      );
+    try {
+      await socialLogin("google");
       setSuccess("Google signup successful! Redirecting...");
       setTimeout(() => navigate("/profile"), 1500);
-    }, 1500);
+    } catch (err) {
+      setError(err.message || "Google signup failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleFacebookSignup = () => {
+  const handleFacebookSignup = async () => {
     setLoading(true);
-    // Simulate Facebook OAuth
-    setTimeout(() => {
-      const mockFbUser = {
-        email: `user_${Date.now()}@facebook.com`,
-        fullName: "Facebook User",
-        photoUrl: "https://via.placeholder.com/150",
-      };
-      socialLogin(
-        "facebook",
-        mockFbUser.email,
-        mockFbUser.fullName,
-        mockFbUser.photoUrl
-      );
+    try {
+      await socialLogin("facebook");
       setSuccess("Facebook signup successful! Redirecting...");
       setTimeout(() => navigate("/profile"), 1500);
-    }, 1500);
+    } catch (err) {
+      setError(err.message || "Facebook signup failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getPasswordStrengthColor = () => {
@@ -179,7 +163,7 @@ export default function Signup() {
             to="/"
             className="inline-flex items-center text-purple-600 hover:text-pink-600 transition mb-6"
           >
-            <span className="text-sm">← Back to Home</span>
+            <span className="text-sm">â† Back to Home</span>
           </Link>
 
           {/* Main Card */}
@@ -189,7 +173,7 @@ export default function Signup() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 Create Account
               </h1>
-              <p className="text-gray-600">Join CLOTHONRENT today</p>
+              <p className="text-gray-600">Join WardroWave today</p>
             </div>
 
             {/* Error Message */}

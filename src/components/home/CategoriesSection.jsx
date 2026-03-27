@@ -1,103 +1,96 @@
-const categories = [
-  {
-    name: 'Men',
-    image: 'https://plus.unsplash.com/premium_photo-1661434624086-e02557c68815?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWVuJTIwc2VjdGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-    icon: '👔'
-  },
-  {
-    name: 'Women',
-    image: 'https://images.unsplash.com/photo-1751399566412-ad1194241c5c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHdvbWVuJTIwaW4lMjBzdWl0fGVufDB8fDB8fHww%3D%3D',
-    icon: '👗'
-  },
-  {
-    name: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=300&fit=crop',
-    icon: '⌚'
-  }
-];
-
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { StaggerContainer, StaggerItem, FadeIn } from '../common/PageTransition';
+import { ShoppingBag } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function CategoryCard({ category }) {
-  const navigate = useNavigate();
-  
-  const getCategoryPath = (categoryName) => {
-    switch(categoryName.toLowerCase()) {
-      case 'men':
-        return '/men';
-      case 'women':
-        return '/women';
-      case 'accessories':
-        return '/accessories';
-      default:
-        return '/rentals';
-    }
-  };
-  
-  return (
-    <div className="relative h-48 sm:h-60 md:h-72 rounded-3xl overflow-hidden cursor-pointer group shadow-lg hover:shadow-2xl transition duration-300">
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400 opacity-20 group-hover:opacity-40 transition"></div>
-      <img 
-        src={category.image}
-        alt={category.name}
-        className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent group-hover:from-black/70 transition flex flex-col items-center justify-center gap-4">
-        <span className="text-5xl md:text-6xl">{category.icon}</span>
-        <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center">{category.name}</h3>
-        <button 
-          onClick={() => navigate(getCategoryPath(category.name))}
-          className="mt-2 px-6 py-2 bg-white text-purple-600 rounded-full font-bold text-sm md:text-base hover:bg-purple-600 hover:text-white transition">Shop Now</button>
-      </div>
-    </div>
-  );
-}
+const categories = [
+  {
+    name: 'Men’s Collection',
+    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop',
+    icon: '👔',
+    tag: 'Formal & Ethnic',
+    path: '/men'
+  },
+  {
+    name: 'Women’s Collection',
+    image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=800&fit=crop',
+    icon: '👗',
+    tag: 'Bridal & Party',
+    path: '/women'
+  },
+  {
+    name: 'Luxe Accessories',
+    image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&h=800&fit=crop',
+    icon: '⌚',
+    tag: 'Jewelry & Watches',
+    path: '/accessories'
+  }
+];
 
 export default function CategoriesSection() {
-  const categoryRefs = useRef([]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      categoryRefs.current.forEach((ref, idx) => {
-        gsap.from(ref, {
-          opacity: 0,
-          scale: 0.8,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: ref,
-            start: 'top 80%',
-            toggleActions: 'play none none none'
-          },
-          delay: idx * 0.12
-        });
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+  const navigate = useNavigate();
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-16 lg:py-20 bg-slate-50 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Shop by Category</h2>
-          <p className="text-gray-600 text-base md:text-lg">Find the perfect rental for any occasion</p>
-        </div>
+        <FadeIn delay={0.1} className="text-center mb-16 md:mb-20 max-w-2xl mx-auto">
+          <span className="inline-block py-1 px-3 rounded-full bg-pink-100 text-pink-600 font-bold tracking-wider text-xs uppercase mb-4 border border-pink-200">
+            Curated Collections
+          </span>
+          <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+            Shop by Category
+          </h2>
+          <p className="text-gray-600 text-lg md:text-xl font-medium leading-relaxed">
+            Find the perfect rental for your next grand event. Designed to turn heads and engineered for comfort.
+          </p>
+        </FadeIn>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <StaggerContainer stagger={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {categories.map((category, idx) => (
-            <div
-              key={idx}
-              ref={(el) => (categoryRefs.current[idx] = el)}
-            >
-              <CategoryCard category={category} />
-            </div>
+            <StaggerItem key={idx}>
+              <div 
+                onClick={() => navigate(category.path)}
+                className="relative h-96 lg:h-[32rem] rounded-[32px] overflow-hidden cursor-pointer group shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 block"
+              >
+                {/* Background image & overlay */}
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500 z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-80 z-10" />
+                
+                <img 
+                  src={category.image}
+                  alt={category.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] z-0"
+                />
+
+                {/* Content over image */}
+                <div className="absolute inset-x-0 bottom-0 p-8 z-20 flex flex-col items-center justify-end h-full">
+                  <span className="text-white/80 uppercase tracking-[0.2em] text-xs font-bold mb-3 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    {category.tag}
+                  </span>
+                  
+                  <h3 className="text-3xl lg:text-4xl font-black text-white text-center leading-tight mb-2 group-hover:-translate-y-4 transition-transform duration-500">
+                    {category.name}
+                  </h3>
+
+                  <button className="flex items-center gap-2 mt-2 px-6 py-3 bg-white/20 backdrop-blur-md text-white rounded-full font-bold text-sm border border-white/50 hover:bg-white hover:text-gray-900 transition-all duration-300 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                    <ShoppingBag className="w-4 h-4" />
+                    Explore Now
+                  </button>
+                </div>
+
+                {/* Icon blob floating top right */}
+                <div className="absolute top-6 right-6 w-14 h-14 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center text-2xl shadow-lg border border-white/30 z-20 transform translate-y-[-20px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                  {category.icon}
+                </div>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

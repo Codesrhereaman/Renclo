@@ -1,11 +1,11 @@
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+﻿import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 export default function ContactInfo() {
   const contactCards = [
     {
       icon: Mail,
       title: 'Email',
-      info: 'support@clothonrent.com',
+      info: 'support@WardroWave.com',
       subtext: "We'll respond within 24 hours",
       bgColor: 'bg-purple-100',
       iconColor: 'text-purple-600'

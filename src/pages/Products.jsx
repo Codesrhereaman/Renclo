@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Star, Filter, X } from 'lucide-react';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
+import PageTransition, { StaggerContainer, StaggerItem } from '../components/common/PageTransition';
 import { initProductsAnimations } from '../animations/productsAnimations';
 
 const PRODUCTS = [
@@ -23,28 +25,31 @@ function ProductCard({ product }) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden group">
-      <div className="relative h-48 sm:h-56 md:h-64 bg-gray-200 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full group card-lift hover:-translate-y-1">
+      <Link to={`/product/${product.id}`} className="relative h-48 sm:h-56 md:h-64 bg-gray-200 overflow-hidden block">
         <img 
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
         />
         {!product.inStock && (
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="text-white font-bold text-lg">Out of Stock</span>
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+            <span className="text-white font-bold text-lg border-2 border-white px-4 py-1 rounded-lg">Out of Stock</span>
           </div>
         )}
         <button 
-          onClick={() => setIsFavorite(!isFavorite)}
-          className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-lg hover:bg-red-50 transition"
+          onClick={(e) => { e.preventDefault(); setIsFavorite(!isFavorite); }}
+          className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-300 z-10"
         >
           <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
         </button>
-      </div>
+      </Link>
 
-      <div className="p-4">
-        <h3 className="font-bold text-gray-900 mb-2 text-sm sm:text-base line-clamp-2">{product.name}</h3>
+      <div className="p-4 md:p-5 flex flex-col flex-grow">
+        <Link to={`/product/${product.id}`} className="hover:text-purple-600 transition-colors">
+          <h3 className="font-bold text-gray-900 mb-2 text-sm sm:text-base line-clamp-2">{product.name}</h3>
+        </Link>
         
         <div className="flex items-center gap-2 mb-3">
           <div className="flex text-yellow-400">
@@ -109,7 +114,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <PageTransition className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Header />
 
       {/* Page Header */}
@@ -230,11 +235,13 @@ export default function ProductsPage() {
 
             {/* Products Grid */}
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {filteredProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <StaggerItem key={product.id}>
+                    <ProductCard product={product} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             ) : (
               <div className="text-center py-12 bg-white rounded-lg">
                 <p className="text-gray-600 text-lg mb-4">No products found</p>
@@ -254,6 +261,6 @@ export default function ProductsPage() {
       </div>
 
       <Footer />
-    </div>
+    </PageTransition>
   );
 }

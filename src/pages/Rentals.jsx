@@ -5,8 +5,10 @@ import Footer from "../components/common/Footer";
 import RentalCard from "../components/rentals/RentalCard";
 import FilterSidebar from "../components/rentals/FilterSidebar";
 import RentalTopBar from "../components/rentals/RentalTopBar";
+import PageTransition, { StaggerContainer, StaggerItem } from '../components/common/PageTransition';
+import { SkeletonGrid } from '../components/common/Skeleton';
 import { useLocation } from "react-router-dom";
-import { RENTAL_ITEMS } from "../data/productsData";
+import api from "../utils/api";
 
 export default function Rentals() {
   const [showFilters, setShowFilters] = useState(false);
@@ -15,6 +17,8 @@ export default function Rentals() {
   const [sortBy, setSortBy] = useState("featured");
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     initRentalsAnimations();
@@ -22,10 +26,22 @@ export default function Rentals() {
     if (location.state?.searchQuery) {
       setSearchQuery(location.state.searchQuery);
     }
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await api.product.getAll();
+        setProducts(res.data?.products || res.products || []);
+      } catch(err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, [location.state?.searchQuery]);
 
   // Filter items
-  let filteredItems = RENTAL_ITEMS.filter((item) => {
+  let filteredItems = products.filter((item) => {
     // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
@@ -65,7 +81,7 @@ export default function Rentals() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <PageTransition className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Header />
 
       {/* Page Header */}
@@ -104,12 +120,16 @@ export default function Rentals() {
             />
 
             {/* Rentals Grid */}
-            {filteredItems.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {loading ? (
+              <SkeletonGrid count={6} />
+            ) : filteredItems.length > 0 ? (
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {filteredItems.map((item) => (
-                  <RentalCard key={item.id} item={item} />
+                  <StaggerItem key={item.id}>
+                    <RentalCard item={item} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             ) : (
               <div className="text-center py-12 bg-white rounded-lg">
                 <p className="text-gray-600 text-lg mb-4">No items found</p>
@@ -129,6 +149,6 @@ export default function Rentals() {
       </div>
 
       <Footer />
-    </div>
+    </PageTransition>
   );
 }

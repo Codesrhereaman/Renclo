@@ -1,14 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Eye, EyeOff, Mail, Lock, CheckCircle, AlertCircle } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context api/AuthContext';
 import { initLoginAnimations } from '../animations/loginAnimations';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, socialLogin } = useAuth();
+  const location = useLocation();
+  const { login, socialLogin, isAuthenticated } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) navigate('/', { replace: true });
+  }, [isAuthenticated, navigate]);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -47,60 +54,49 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
-
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-      login(formData.email, formData.password);
-      
+      await login(formData.email, formData.password);
       if (rememberMe) {
         localStorage.setItem('rememberEmail', formData.email);
       } else {
         localStorage.removeItem('rememberEmail');
       }
-
-      setSuccess('Login successful! Redirecting...');
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
+      toast.success('Welcome back! 🎉');
+      const redirectTo = location.state?.from?.pathname || '/';
+      setTimeout(() => navigate(redirectTo, { replace: true }), 800);
     } catch (err) {
-      setError(err.message || 'Login failed');
+      setError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setLoading(true);
-    // Simulate Google OAuth
-    setTimeout(() => {
-      const mockGoogleUser = {
-        email: `user_${Date.now()}@gmail.com`,
-        fullName: 'Google User',
-        photoUrl: 'https://via.placeholder.com/150'
-      };
-      socialLogin('google', mockGoogleUser.email, mockGoogleUser.fullName, mockGoogleUser.photoUrl);
+    try {
+      await socialLogin('google');
       setSuccess('Google login successful! Redirecting...');
       setTimeout(() => navigate('/'), 1500);
-    }, 1500);
+    } catch (err) {
+      setError(err.message || 'Google login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleFacebookLogin = () => {
+  const handleFacebookLogin = async () => {
     setLoading(true);
-    // Simulate Facebook OAuth
-    setTimeout(() => {
-      const mockFbUser = {
-        email: `user_${Date.now()}@facebook.com`,
-        fullName: 'Facebook User',
-        photoUrl: 'https://via.placeholder.com/150'
-      };
-      socialLogin('facebook', mockFbUser.email, mockFbUser.fullName, mockFbUser.photoUrl);
+    try {
+      await socialLogin('facebook');
       setSuccess('Facebook login successful! Redirecting...');
       setTimeout(() => navigate('/'), 1500);
-    }, 1500);
+    } catch (err) {
+      setError(err.message || 'Facebook login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Demo credentials hint
@@ -127,7 +123,7 @@ export default function Login() {
             {/* Header */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-              <p className="text-gray-600">Sign in to your CLOTHONRENT account</p>
+              <p className="text-gray-600">Sign in to your WardroWave account</p>
             </div>
 
             {/* Error Message */}

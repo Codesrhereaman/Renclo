@@ -1,5 +1,7 @@
-import { X, Upload, Image as ImageIcon } from 'lucide-react';
+import { X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../config/firebase';
 
 export default function UploadItemForm({ onClose, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -12,10 +14,16 @@ export default function UploadItemForm({ onClose, onSubmit }) {
     color: '',
     brand: '',
     condition: 'excellent',
-    images: []
   });
 
+  const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const originalPriceNum = parseFloat(formData.originalPrice);
+  const minRentalPrice = isNaN(originalPriceNum) ? 0 : Math.ceil(originalPriceNum * 0.05);
+  const maxRentalPrice = isNaN(originalPriceNum) ? 0 : Math.floor(originalPriceNum * 0.10);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +33,7 @@ export default function UploadItemForm({ onClose, onSubmit }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -33,17 +42,51 @@ export default function UploadItemForm({ onClose, onSubmit }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({
-      ...formData,
-      id: Date.now(),
-      image: imagePreview || 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=500&h=600&fit=crop',
-      rented: 0,
-      earnings: 0,
-      qr: `QR${Date.now()}`
-    });
-    onClose();
+    if (!imageFile && !imagePreview) return alert('Please select an image first!');
+
+    let finalImageUrl = imagePreview || 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=500&h=600&fit=crop';
+    
+    if (imageFile) {
+      try {
+        setUploading(true);
+        const storageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+        finalImageUrl = await new Promise((resolve, reject) => {
+          uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              setUploadProgress(progress);
+            },
+            (error) => {
+              console.error(error);
+              reject(error);
+            },
+            async () => {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadURL);
+            }
+          );
+        });
+      } catch (err) {
+        alert('Failed to upload image. Please ensure Firebase Storage rules allow writing.');
+        setUploading(false);
+        return;
+      }
+    }
+
+    try {
+      await onSubmit({
+        ...formData,
+        image: finalImageUrl,
+      });
+      onClose();
+    } catch(err) {
+      setUploading(false);
+    }
   };
 
   return (
@@ -154,10 +197,13 @@ export default function UploadItemForm({ onClose, onSubmit }) {
                 name="rentalPrice"
                 value={formData.rentalPrice}
                 onChange={handleChange}
+                min={minRentalPrice}
+                max={maxRentalPrice}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-                placeholder="₹"
+                placeholder={originalPriceNum ? `₹${minRentalPrice} - ₹${maxRentalPrice}` : `₹`}
               />
+              {originalPriceNum > 0 && <p className="text-xs text-purple-600 font-medium mt-1">Platform rule: Must be 5-10% of MRP (₹{minRentalPrice}-₹{maxRentalPrice})</p>}
             </div>
           </div>
 
@@ -221,16 +267,27 @@ export default function UploadItemForm({ onClose, onSubmit }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+              disabled={uploading}
+              className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition font-bold flex items-center justify-center gap-2"
+              disabled={uploading}
+              className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition font-bold flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <Upload className="w-5 h-5" />
-              Upload Item
+              {uploading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Uploading... {uploadProgress}%
+                </>
+              ) : (
+                <>
+                  <Upload className="w-5 h-5" />
+                  Upload Item
+                </>
+              )}
             </button>
           </div>
         </form>

@@ -1,4 +1,15 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { auth } from '../config/firebase';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  FacebookAuthProvider, 
+  signInWithPopup, 
+  signOut,
+  onAuthStateChanged
+} from 'firebase/auth';
+import api from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -6,122 +17,74 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize user from localStorage on mount
+  // Listen to Firebase Auth state
   useEffect(() => {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Error parsing stored user:', error);
-        localStorage.removeItem('currentUser');
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          // Fetch our DB profile to get roles and addresses
+          const res = await api.auth.getMe();
+          setUser(res.data.user);
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    });
+
+    return unsubscribe; // Cleanup subscription on unmount
   }, []);
 
   // Sign up with email and password
-  const signup = (fullName, email, phone, password) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    // Check if user already exists
-    if (users.some(u => u.email === email)) {
-      throw new Error('Email already registered');
-    }
-
-    const newUser = {
-      id: Date.now().toString(),
-      fullName,
-      email,
-      phone,
-      password: btoa(password), // Simple encoding (not secure, use bcrypt in production)
-      createdAt: new Date().toISOString(),
-      authMethod: 'email'
-    };
-
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    
-    // Set current user (without password)
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-    
-    return userWithoutPassword;
+  const signup = async (fullName, email, phone, password) => {
+    // 1. Create user in Firebase
+    await createUserWithEmailAndPassword(auth, email, password);
+    // 2. Sync profile to our backend (creates Firestore doc + cart + wishlist)
+    const res = await api.auth.syncProfile({ fullName, phone });
+    setUser(res.data.user);
+    return res.data.user;
   };
 
   // Login with email and password
-  const login = (email, password) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    const foundUser = users.find(u => u.email === email);
-    if (!foundUser) {
-      throw new Error('User not found');
-    }
-
-    const decodedPassword = atob(foundUser.password);
-    if (decodedPassword !== password) {
-      throw new Error('Invalid password');
-    }
-
-    const { password: _, ...userWithoutPassword } = foundUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-    
-    return userWithoutPassword;
+  const login = async (email, password) => {
+    await signInWithEmailAndPassword(auth, email, password);
+    // onAuthStateChanged automatically fetches and sets the user profile
   };
 
   // Social login (Google, Facebook)
-  const socialLogin = (provider, email, fullName, photoUrl) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    let foundUser = users.find(u => u.email === email);
+  const socialLogin = async (providerName) => {
+    let provider;
+    if (providerName === 'google') provider = new GoogleAuthProvider();
+    else if (providerName === 'facebook') provider = new FacebookAuthProvider();
+    else throw new Error('Unsupported provider');
 
-    if (!foundUser) {
-      // Create new user if doesn't exist
-      foundUser = {
-        id: Date.now().toString(),
-        fullName,
-        email,
-        phone: '',
-        password: null,
-        photoUrl,
-        createdAt: new Date().toISOString(),
-        authMethod: provider
-      };
-      users.push(foundUser);
-      localStorage.setItem('users', JSON.stringify(users));
-    }
-
-    const { password: _, ...userWithoutPassword } = foundUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-    
-    return userWithoutPassword;
+    // 1. Popup Firebase login
+    await signInWithPopup(auth, provider);
+    // 2. Sync profile (creates backend profile if first login)
+    const res = await api.auth.syncProfile({});
+    setUser(res.data.user);
+    return res.data.user;
   };
 
   // Logout
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await api.auth.logout(); // Optional: Revoke refresh tokens on server
+    } catch (e) {
+      // Ignore if server is down or token is invalid
+    }
+    await signOut(auth); // Clear Firebase local session
     setUser(null);
-    localStorage.removeItem('currentUser');
   };
 
   // Update user profile
-  const updateProfile = (updates) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex(u => u.id === user.id);
-
-    if (userIndex !== -1) {
-      users[userIndex] = { ...users[userIndex], ...updates };
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      const updatedUser = { ...user, ...updates };
-      setUser(updatedUser);
-      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-      
-      return updatedUser;
-    }
-    throw new Error('User not found');
+  const updateProfile = async (updates) => {
+    const res = await api.user.updateProfile(updates);
+    setUser(res.data.user);
+    return res.data.user;
   };
 
   const value = {
@@ -137,7 +100,8 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {/* Wait for Firebase to determine auth state before rendering children so protected routes don't flash */}
+      {!isLoading && children}
     </AuthContext.Provider>
   );
 }

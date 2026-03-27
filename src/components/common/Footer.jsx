@@ -51,17 +51,17 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 mt-1 text-purple-400 flex-shrink-0" />
                 <div>
-                  <p className="text-sm">support@wardowave.com</p>
+                  <p className="text-sm">support.wardrowave@gmail.com</p>
                   <p className="text-xs text-gray-500">We reply within 24 hours</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Phone className="w-5 h-5 mt-1 text-purple-400 flex-shrink-0" />
-                <p className="text-sm">+1 (800) 123-4567</p>
+                <p className="text-sm">+91 844589xxxx</p>
               </div>
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-1 text-purple-400 flex-shrink-0" />
-                <p className="text-sm">123 Fashion St, New York, NY 10001</p>
+                <p className="text-sm">Beta 1st Greator Noida, Uttar Pradesh, India</p>
               </div>
             </div>
           </div>

@@ -1,9 +1,4 @@
-export default function RecentActivity() {
-  const activities = [
-    { item: 'Designer Saree', customer: 'Priya S.', date: '2 hours ago', status: 'Active' },
-    { item: 'Premium Blazer', customer: 'Rajesh K.', date: '5 hours ago', status: 'Delivered' },
-    { item: 'Casual Shirt', customer: 'Ananya G.', date: '1 day ago', status: 'Returned' },
-  ];
+export default function RecentActivity({ activities = [] }) {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -16,7 +11,7 @@ export default function RecentActivity() {
               <p className="text-sm text-gray-600">{rental.customer}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">{rental.date}</p>
+              <p className="text-sm text-gray-600">{new Date(rental.date).toLocaleDateString()}</p>
               <span className={`inline-block mt-1 px-2 py-1 rounded text-xs font-bold ${
                 rental.status === 'Active' ? 'bg-blue-100 text-blue-600' :
                 rental.status === 'Delivered' ? 'bg-green-100 text-green-600' :

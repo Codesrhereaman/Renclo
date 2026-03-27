@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { initContactAnimations } from '../animations/contactAnimations';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
@@ -55,7 +55,7 @@ export default function Contact() {
             allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="CLOTHONRENT Location"
+            title="WardroWave Location"
           ></iframe>
         </div>
       </div>

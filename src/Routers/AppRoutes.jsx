@@ -1,48 +1,118 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import ForgotPassword from "../pages/ForgotPassword";
-import ResetPassword from "../pages/ResetPassword";
-import UserProfile from "../pages/UserProfile";
-import Products from "../pages/Products";
-import Rentals from "../pages/Rentals";
-import Wishlist from "../pages/Wishlist";
-import Cart from "../pages/Cart";
-import Checkout from "../pages/Checkout";
-import OrderSuccess from "../pages/OrderSuccess";
-import About from "../pages/About";
-import Contact from "../pages/Contact";
-import OwnerDashboard from "../pages/OwnerDashboard";
-import BecomeOwner from "../pages/BecomeOwner";
-import MenCategory from "../pages/MenCategory";
-import WomenCategory from "../pages/WomenCategory";
-import AccessoriesCategory from "../pages/AccessoriesCategory";
+import { lazy, Suspense } from "react";
+import { Toaster } from "react-hot-toast";
+import ProtectedRoute from "../components/common/ProtectedRoute";
+
+// ─── Lazy-loaded pages (code splitting for faster initial load) ───────────────
+
+const Home             = lazy(() => import("../pages/Home"));
+const Login            = lazy(() => import("../pages/Login"));
+const Signup           = lazy(() => import("../pages/Signup"));
+const ForgotPassword   = lazy(() => import("../pages/ForgotPassword"));
+const ResetPassword    = lazy(() => import("../pages/ResetPassword"));
+const Products         = lazy(() => import("../pages/Products"));
+const Rentals          = lazy(() => import("../pages/Rentals"));
+const About            = lazy(() => import("../pages/About"));
+const Contact          = lazy(() => import("../pages/Contact"));
+const BecomeOwner      = lazy(() => import("../pages/BecomeOwner"));
+const MenCategory      = lazy(() => import("../pages/MenCategory"));
+const WomenCategory    = lazy(() => import("../pages/WomenCategory"));
+const AccessoriesCategory = lazy(() => import("../pages/AccessoriesCategory"));
+const ProductDetails   = lazy(() => import("../pages/ProductDetails"));
+const Discover         = lazy(() => import("../pages/Discover"));
+
+// ─── Protected (login required) ─────────────────────────────────────────────
+
+const UserProfile      = lazy(() => import("../pages/UserProfile"));
+const VirtualClosetPage = lazy(() => import("../components/profile/VirtualCloset"));
+const Wishlist         = lazy(() => import("../pages/Wishlist"));
+const Cart             = lazy(() => import("../pages/Cart"));
+const Checkout         = lazy(() => import("../pages/Checkout"));
+const OrderSuccess     = lazy(() => import("../pages/OrderSuccess"));
+
+// ─── Owner / Admin only ──────────────────────────────────────────────────────
+
+const OwnerDashboard   = lazy(() => import("../pages/OwnerDashboard"));
+
+// ─── Fullscreen Suspense loader ───────────────────────────────────────────────
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin" />
+        <p className="text-gray-500 text-sm font-medium">Loading...</p>
+      </div>
+    </div>
+  );
+}
 
 export default function AppRoutes() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/rentals" element={<Rentals />} />
-        <Route path="/men" element={<MenCategory />} />
-        <Route path="/women" element={<WomenCategory />} />
-        <Route path="/accessories" element={<AccessoriesCategory />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/become-owner" element={<BecomeOwner />} />
-        <Route path="/owner/dashboard" element={<OwnerDashboard />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-      </Routes>
+      {/* Global toast notifications */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3500,
+          style: {
+            borderRadius: '10px',
+            background: '#1e1e2e',
+            color: '#fff',
+            fontSize: '14px',
+          },
+          success: { iconTheme: { primary: '#a855f7', secondary: '#fff' } },
+          error:   { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+        }}
+      />
+
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* ── Public routes ─────────────────────────────── */}
+          <Route path="/"              element={<Home />} />
+          <Route path="/rentals"       element={<Rentals />} />
+          <Route path="/men"           element={<MenCategory />} />
+          <Route path="/women"         element={<WomenCategory />} />
+          <Route path="/accessories"   element={<AccessoriesCategory />} />
+          <Route path="/products"      element={<Products />} />
+          <Route path="/product/:id"   element={<ProductDetails />} />
+          <Route path="/discover"      element={<Discover />} />
+          <Route path="/about"         element={<About />} />
+          <Route path="/contact"       element={<Contact />} />
+          <Route path="/become-owner"  element={<BecomeOwner />} />
+          <Route path="/login"         element={<Login />} />
+          <Route path="/signup"        element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password"  element={<ResetPassword />} />
+
+          {/* ── Protected: any logged-in user ─────────────── */}
+          <Route path="/profile" element={
+            <ProtectedRoute><UserProfile /></ProtectedRoute>
+          } />
+          <Route path="/virtual-closet" element={
+            <ProtectedRoute><VirtualClosetPage /></ProtectedRoute>
+          } />
+          <Route path="/wishlist" element={
+            <ProtectedRoute><Wishlist /></ProtectedRoute>
+          } />
+          <Route path="/cart" element={
+            <ProtectedRoute><Cart /></ProtectedRoute>
+          } />
+          <Route path="/checkout" element={
+            <ProtectedRoute><Checkout /></ProtectedRoute>
+          } />
+          <Route path="/order-success" element={
+            <ProtectedRoute><OrderSuccess /></ProtectedRoute>
+          } />
+
+          {/* ── Protected: owner or admin only ────────────── */}
+          <Route path="/owner/dashboard" element={
+            <ProtectedRoute roles={['owner', 'admin']}>
+              <OwnerDashboard />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

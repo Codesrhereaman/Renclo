@@ -12,51 +12,51 @@ export default function FilterSidebar({ showFilters, setShowFilters, selectedCat
         </div>
 
         {/* Category Filter */}
-        <div className="mb-6">
-          <h3 className="font-bold text-gray-900 mb-3">Category</h3>
-          <div className="space-y-2">
+        <div className="mb-8">
+          <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider text-purple-600">Category</h3>
+          <div className="flex flex-wrap gap-2">
             {[
               { value: 'all', label: 'All Items' },
               { value: 'men', label: 'Men' },
               { value: 'women', label: 'Women' },
               { value: 'accessories', label: 'Accessories' }
             ].map(cat => (
-              <label key={cat.value} className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="category"
-                  value={cat.value}
-                  checked={selectedCategory === cat.value}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-4 h-4 text-purple-600"
-                />
-                <span className="ml-3 text-gray-700 text-sm">{cat.label}</span>
-              </label>
+              <button
+                key={cat.value}
+                onClick={() => setSelectedCategory(cat.value)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+                  selectedCategory === cat.value
+                    ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-200'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-purple-300 hover:bg-purple-50'
+                }`}
+              >
+                {cat.label}
+              </button>
             ))}
           </div>
         </div>
 
         {/* Price Filter */}
-        <div className="mb-6">
-          <h3 className="font-bold text-gray-900 mb-3">Rental Price</h3>
-          <div className="space-y-2">
+        <div className="mb-8">
+          <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider text-purple-600">Rental Price</h3>
+          <div className="flex flex-col gap-2">
             {[
               { value: 'all', label: 'All Prices' },
               { value: 'low', label: 'Under ₹300' },
               { value: 'mid', label: '₹300 - ₹600' },
               { value: 'high', label: 'Over ₹600' }
             ].map(price => (
-              <label key={price.value} className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="price"
-                  value={price.value}
-                  checked={selectedPrice === price.value}
-                  onChange={(e) => setSelectedPrice(e.target.value)}
-                  className="w-4 h-4 text-purple-600"
-                />
-                <span className="ml-3 text-gray-700 text-sm">{price.label}</span>
-              </label>
+              <button
+                key={price.value}
+                onClick={() => setSelectedPrice(price.value)}
+                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border ${
+                  selectedPrice === price.value
+                    ? 'bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 border-purple-200'
+                    : 'bg-white text-gray-600 border-gray-100 hover:border-purple-200 hover:bg-slate-50'
+                }`}
+              >
+                {price.label}
+              </button>
             ))}
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function FilterSidebar({ showFilters, setShowFilters, selectedCat
             setSelectedCategory('all');
             setSelectedPrice('all');
           }}
-          className="w-full py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm"
+          className="w-full py-3 border-2 border-dashed border-gray-300 text-gray-500 rounded-xl hover:bg-gray-50 hover:border-purple-300 hover:text-purple-600 transition font-bold text-sm"
         >
           Reset Filters
         </button>

@@ -1,91 +1,91 @@
-import { Star, Users } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { Star, Quote } from 'lucide-react';
+import { StaggerContainer, StaggerItem, FadeIn } from '../common/PageTransition';
 
 const testimonials = [
-  { name: 'Sarah Johnson', role: 'Fashion Enthusiast', rating: 5, comment: 'Amazing quality and fast shipping! Will definitely rent again.', avatar: '👩' },
-  { name: 'Mike Chen', role: 'Sustainable Fashion Advocate', rating: 5, comment: 'The best fashion platform I\'ve found. Great customer service!', avatar: '👨' },
-  { name: 'Emma Davis', role: 'Style Creator', rating: 5, comment: 'Love the variety and modern design. Highly recommended!', avatar: '👩‍🦰' }
+  {
+    text: "I rented a designer Lehenga for my sister's wedding. It arrived in pristine condition, fit perfectly, and saved me over ₹45,000. WardroWave is a lifesaver!",
+    name: "Priya Sharma",
+    role: "Bride's Sister",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+    rating: 5,
+  },
+  {
+    text: "As a guy who rarely wears suits, buying one for a gala felt like a waste. I rented a timeless tuxedo here—the quality was stellar and returning it was zero hassle.",
+    name: "Rahul Desai",
+    role: "Business Consultant",
+    avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&h=150&fit=crop",
+    rating: 5,
+  },
+  {
+    text: "Listing my unused designer sarees on WardroWave has been amazing. The platform handles the logistics, and I've already made enough passive income to buy new outfits!",
+    name: "Ananya Patel",
+    role: "Lender / Fashion Blogger",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+    rating: 5,
+  }
 ];
 
-function TestimonialCard({ testimonial }) {
-  return (
-    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2 border border-gray-100">
-      <div className="flex items-center gap-4 mb-6">
-        <span className="text-4xl">{testimonial.avatar}</span>
-        <div>
-          <p className="font-bold text-gray-900 text-base md:text-lg">{testimonial.name}</p>
-          <p className="text-gray-600 text-xs md:text-sm">{testimonial.role}</p>
-        </div>
-      </div>
-      <div className="flex text-yellow-400 mb-4">
-        {[...Array(testimonial.rating)].map((_, i) => (
-          <Star key={i} className="w-5 h-5 fill-current" />
-        ))}
-      </div>
-      <p className="text-gray-700 italic text-sm md:text-base leading-relaxed">"{testimonial.comment}"</p>
-    </div>
-  );
-}
-
 export default function TestimonialsSection() {
-  const testimonialRefs = useRef([]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      testimonialRefs.current.forEach((ref, idx) => {
-        gsap.from(ref, {
-          opacity: 0,
-          y: 30,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: ref,
-            start: 'top 80%',
-            toggleActions: 'play none none none'
-          },
-          delay: idx * 0.15
-        });
-      });
-    });
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-white to-slate-50">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12 md:mb-16">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Users className="w-8 h-8 text-purple-600" />
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900">What Customers Say</h2>
-          </div>
-          <p className="text-gray-600 text-base md:text-lg">Join 50K+ happy customers who trust CLOTHONRENT</p>
-        </div>
+    <section className="py-16 lg:py-20 bg-slate-50 relative overflow-hidden">
+      {/* Background soft meshes */}
+      <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-t from-emerald-50 to-transparent blur-3xl opacity-70"></div>
+        <div className="absolute bottom-[-10%] left-[10%] w-[40%] h-[40%] rounded-full bg-gradient-to-tr from-cyan-50 to-transparent blur-3xl opacity-60"></div>
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <FadeIn delay={0.1} className="text-center mb-16 md:mb-20 max-w-3xl mx-auto">
+          <span className="inline-block py-1 px-3 rounded-full bg-indigo-50 text-indigo-600 font-bold tracking-wider text-xs uppercase mb-4 border border-indigo-100">
+            Real Experiences
+          </span>
+          <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+            Loved By Thousands
+          </h2>
+          <p className="text-gray-600 text-lg md:text-xl font-medium leading-relaxed">
+            Don't just take our word for it. Look at what our community of renters and lenders have to say about WardroWave.
+          </p>
+        </FadeIn>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
           {testimonials.map((testimonial, idx) => (
-            <div 
-              key={idx}
-              ref={(el) => (testimonialRefs.current[idx] = el)}
-              className="bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="text-4xl">{testimonial.avatar}</span>
-                <div>
-                  <p className="font-bold text-gray-900 text-base md:text-lg">{testimonial.name}</p>
-                  <p className="text-gray-600 text-xs md:text-sm">{testimonial.role}</p>
+            <StaggerItem key={idx}>
+              <div className="bg-white p-8 md:p-10 rounded-[32px] shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full flex flex-col relative group">
+                
+                {/* Large Background Quote Icon */}
+                <Quote className="absolute top-6 right-6 w-24 h-24 text-slate-50 group-hover:text-pink-50 transition-colors duration-500 z-0 transform rotate-12" />
+
+                {/* Rating */}
+                <div className="flex text-yellow-400 mb-8 relative z-10 gap-1 mt-2">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-current" />
+                  ))}
+                </div>
+                
+                {/* Text */}
+                <p className="text-gray-700 text-lg md:text-xl font-medium leading-relaxed mb-10 flex-grow relative z-10">
+                  "{testimonial.text}"
+                </p>
+                
+                {/* User Info Wrapper */}
+                <div className="flex items-center gap-5 mt-auto relative z-10 pt-6 border-t border-gray-100">
+                  <div className="relative">
+                    <img 
+                      src={testimonial.avatar} 
+                      alt={testimonial.name}
+                      loading="lazy"
+                      className="w-16 h-16 rounded-full object-cover ring-4 ring-purple-50 group-hover:ring-pink-100 transition-all duration-300 shadow-md"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 text-lg">{testimonial.name}</h4>
+                    <p className="text-purple-600 font-medium text-sm">{testimonial.role}</p>
+                  </div>
                 </div>
               </div>
-              <div className="flex text-yellow-400 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 italic text-sm md:text-base leading-relaxed">"{testimonial.comment}"</p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );
