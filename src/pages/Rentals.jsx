@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { initRentalsAnimations } from '../animations/rentalsAnimations';
 import Header from '../components/common/Header';
 import Footer from "../components/common/Footer";
 import RentalCard from "../components/rentals/RentalCard";
@@ -21,7 +20,6 @@ export default function Rentals() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    initRentalsAnimations();
     // Set search query from header navigation
     if (location.state?.searchQuery) {
       setSearchQuery(location.state.searchQuery);
@@ -31,7 +29,7 @@ export default function Rentals() {
         setLoading(true);
         const res = await api.product.getAll();
         setProducts(res.data?.products || res.products || []);
-      } catch(err) {
+      } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);

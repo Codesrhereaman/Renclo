@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "../components/common/ProtectedRoute";
+import BottomNav from "../components/common/BottomNav";
 
 // ─── Lazy-loaded pages (code splitting for faster initial load) ───────────────
 
@@ -14,7 +15,6 @@ const Products         = lazy(() => import("../pages/Products"));
 const Rentals          = lazy(() => import("../pages/Rentals"));
 const About            = lazy(() => import("../pages/About"));
 const Contact          = lazy(() => import("../pages/Contact"));
-const BecomeOwner      = lazy(() => import("../pages/BecomeOwner"));
 const MenCategory      = lazy(() => import("../pages/MenCategory"));
 const WomenCategory    = lazy(() => import("../pages/WomenCategory"));
 const AccessoriesCategory = lazy(() => import("../pages/AccessoriesCategory"));
@@ -66,53 +66,55 @@ export default function AppRoutes() {
         }}
       />
 
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* ── Public routes ─────────────────────────────── */}
-          <Route path="/"              element={<Home />} />
-          <Route path="/rentals"       element={<Rentals />} />
-          <Route path="/men"           element={<MenCategory />} />
-          <Route path="/women"         element={<WomenCategory />} />
-          <Route path="/accessories"   element={<AccessoriesCategory />} />
-          <Route path="/products"      element={<Products />} />
-          <Route path="/product/:id"   element={<ProductDetails />} />
-          <Route path="/discover"      element={<Discover />} />
-          <Route path="/about"         element={<About />} />
-          <Route path="/contact"       element={<Contact />} />
-          <Route path="/become-owner"  element={<BecomeOwner />} />
-          <Route path="/login"         element={<Login />} />
-          <Route path="/signup"        element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password"  element={<ResetPassword />} />
+      <div className="pb-16 md:pb-0 flex flex-col min-h-screen">
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* ── Public routes ─────────────────────────────── */}
+            <Route path="/"              element={<Home />} />
+            <Route path="/rentals"       element={<Rentals />} />
+            <Route path="/men"           element={<MenCategory />} />
+            <Route path="/women"         element={<WomenCategory />} />
+            <Route path="/accessories"   element={<AccessoriesCategory />} />
+            <Route path="/products"      element={<Products />} />
+            <Route path="/product/:id"   element={<ProductDetails />} />
+            <Route path="/discover"      element={<Discover />} />
+            <Route path="/about"         element={<About />} />
+            <Route path="/contact"       element={<Contact />} />
+            <Route path="/login"         element={<Login />} />
+            <Route path="/signup"        element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password"  element={<ResetPassword />} />
 
-          {/* ── Protected: any logged-in user ─────────────── */}
-          <Route path="/profile" element={
-            <ProtectedRoute><UserProfile /></ProtectedRoute>
-          } />
-          <Route path="/virtual-closet" element={
-            <ProtectedRoute><VirtualClosetPage /></ProtectedRoute>
-          } />
-          <Route path="/wishlist" element={
-            <ProtectedRoute><Wishlist /></ProtectedRoute>
-          } />
-          <Route path="/cart" element={
-            <ProtectedRoute><Cart /></ProtectedRoute>
-          } />
-          <Route path="/checkout" element={
-            <ProtectedRoute><Checkout /></ProtectedRoute>
-          } />
-          <Route path="/order-success" element={
-            <ProtectedRoute><OrderSuccess /></ProtectedRoute>
-          } />
+            {/* ── Protected: any logged-in user ─────────────── */}
+            <Route path="/profile" element={
+              <ProtectedRoute><UserProfile /></ProtectedRoute>
+            } />
+            <Route path="/virtual-closet" element={
+              <ProtectedRoute><VirtualClosetPage /></ProtectedRoute>
+            } />
+            <Route path="/wishlist" element={
+              <ProtectedRoute><Wishlist /></ProtectedRoute>
+            } />
+            <Route path="/cart" element={
+              <ProtectedRoute><Cart /></ProtectedRoute>
+            } />
+            <Route path="/checkout" element={
+              <ProtectedRoute><Checkout /></ProtectedRoute>
+            } />
+            <Route path="/order-success" element={
+              <ProtectedRoute><OrderSuccess /></ProtectedRoute>
+            } />
 
-          {/* ── Protected: owner or admin only ────────────── */}
-          <Route path="/owner/dashboard" element={
-            <ProtectedRoute roles={['owner', 'admin']}>
-              <OwnerDashboard />
-            </ProtectedRoute>
-          } />
-        </Routes>
-      </Suspense>
+            {/* ── Protected: owner or admin only ────────────── */}
+            <Route path="/owner/dashboard" element={
+              <ProtectedRoute roles={['owner', 'admin']}>
+                <OwnerDashboard />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </Suspense>
+        <BottomNav />
+      </div>
     </Router>
   );
 }

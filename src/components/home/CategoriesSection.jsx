@@ -35,16 +35,16 @@ export default function CategoriesSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="py-16 lg:py-20 bg-slate-50 relative overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="py-8 sm:py-16 lg:py-20 bg-slate-50 relative overflow-hidden">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6">
         <FadeIn delay={0.1} className="text-center mb-16 md:mb-20 max-w-2xl mx-auto">
           <span className="inline-block py-1 px-3 rounded-full bg-pink-100 text-pink-600 font-bold tracking-wider text-xs uppercase mb-4 border border-pink-200">
             Curated Collections
           </span>
-          <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+          <h2 className="section-title text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6 leading-tight">
             Shop by Category
           </h2>
-          <p className="text-gray-600 text-lg md:text-xl font-medium leading-relaxed">
+          <p className="text-gray-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed">
             Find the perfect rental for your next grand event. Designed to turn heads and engineered for comfort.
           </p>
         </FadeIn>
@@ -52,9 +52,9 @@ export default function CategoriesSection() {
         <StaggerContainer stagger={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {categories.map((category, idx) => (
             <StaggerItem key={idx}>
-              <div 
+              <div
                 onClick={() => navigate(category.path)}
-                className="relative h-96 lg:h-[32rem] rounded-[32px] overflow-hidden cursor-pointer group shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 block"
+                className="relative h-64 sm:h-80 md:h-96 lg:h-[32rem] rounded-[32px] overflow-hidden cursor-pointer group shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 block"
               >
                 {/* Background image & overlay */}
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500 z-10" />
@@ -73,7 +73,7 @@ export default function CategoriesSection() {
                     {category.tag}
                   </span>
                   
-                  <h3 className="text-3xl lg:text-4xl font-black text-white text-center leading-tight mb-2 group-hover:-translate-y-4 transition-transform duration-500">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white text-center leading-tight mb-2 group-hover:-translate-y-4 transition-transform duration-500">
                     {category.name}
                   </h3>
 

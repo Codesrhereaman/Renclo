@@ -4,7 +4,7 @@ import { Heart, ShoppingCart, Star, Filter, X } from 'lucide-react';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import PageTransition, { StaggerContainer, StaggerItem } from '../components/common/PageTransition';
-import { initProductsAnimations } from '../animations/productsAnimations';
+
 
 const PRODUCTS = [
   { id: 1, name: 'Premium Formal Blazer', price: 2499, rating: 4.5, reviews: 128, category: 'men', image: 'https://cdn.pixabay.com/photo/2015/07/06/21/58/blazer-835658_640.jpg', inStock: true },
@@ -84,7 +84,7 @@ export default function ProductsPage() {
   const [sortBy, setSortBy] = useState('featured');
 
   useEffect(() => {
-    initProductsAnimations();
+
   }, []);
 
   // Filter products

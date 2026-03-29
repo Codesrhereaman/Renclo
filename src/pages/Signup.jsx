@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Eye,
   EyeOff,
@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context api/AuthContext";
-import { initSignupAnimations } from "../animations/signupAnimations";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 
@@ -31,11 +30,12 @@ export default function Signup() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    initSignupAnimations();
+
   }, []);
 
   const handleChange = (e) => {
@@ -44,6 +44,11 @@ export default function Signup() {
       ...prev,
       [name]: value,
     }));
+    
+    // Clear field-specific error when user types
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
     setError("");
 
     // Calculate password strength
@@ -57,32 +62,36 @@ export default function Signup() {
     }
   };
 
+  const isFormValid = () => {
+    return (
+      formData.fullName.trim() !== "" &&
+      formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) &&
+      formData.phone.trim() !== "" &&
+      formData.password.length >= 6 &&
+      formData.password === formData.confirmPassword &&
+      agreeTerms
+    );
+  };
+
   const validateForm = () => {
-    if (!formData.fullName.trim()) {
-      setError("Full name is required");
-      return false;
-    }
+    const newErrors = {};
+    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError("Please enter a valid email address");
-      return false;
+      newErrors.email = "Please enter a valid email address";
     }
-    if (!formData.phone.trim()) {
-      setError("Phone number is required");
-      return false;
-    }
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return false;
+      newErrors.password = "Password too weak";
     }
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return false;
+      newErrors.confirmPassword = "Passwords do not match";
     }
     if (!agreeTerms) {
-      setError("You must agree to the terms and conditions");
-      return false;
+      newErrors.terms = "Please accept terms & conditions";
     }
-    return true;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSignup = async (e) => {
@@ -104,7 +113,14 @@ export default function Signup() {
         navigate("/profile");
       }, 1500);
     } catch (err) {
-      setError(err.message || "An error occurred during signup");
+      const msg = err.message || "An error occurred during signup";
+      if (msg.toLowerCase().includes("email") || msg.toLowerCase().includes("exist")) {
+        setErrors((prev) => ({ ...prev, email: msg }));
+      } else if (msg.toLowerCase().includes("password") || msg.toLowerCase().includes("weak")) {
+        setErrors((prev) => ({ ...prev, password: msg }));
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -163,7 +179,7 @@ export default function Signup() {
             to="/"
             className="inline-flex items-center text-purple-600 hover:text-pink-600 transition mb-6"
           >
-            <span className="text-sm">â† Back to Home</span>
+            <span className="text-sm">← Back to Home</span>
           </Link>
 
           {/* Main Card */}
@@ -176,7 +192,7 @@ export default function Signup() {
               <p className="text-gray-600">Join WardroWave today</p>
             </div>
 
-            {/* Error Message */}
+            {/* General Error Message */}
             {error && (
               <div className="mb-6 p-4 rounded-lg flex items-center gap-3 bg-red-100 text-red-800 border border-red-300">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -207,10 +223,11 @@ export default function Signup() {
                     value={formData.fullName}
                     onChange={handleChange}
                     placeholder="User Full Name"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                 </div>
+                {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
               </div>
 
               {/* Email Input */}
@@ -226,10 +243,11 @@ export default function Signup() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="example@gmail.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                 </div>
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
               {/* Phone Input */}
@@ -245,10 +263,11 @@ export default function Signup() {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="+91 234567890"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                 </div>
+                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
               </div>
 
               {/* Password Input */}
@@ -264,7 +283,7 @@ export default function Signup() {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter password"
-                    className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                   <button
@@ -279,6 +298,7 @@ export default function Signup() {
                     )}
                   </button>
                 </div>
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
 
                 {/* Password Strength Indicator */}
                 {formData.password && (
@@ -318,7 +338,7 @@ export default function Signup() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirm password"
-                    className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                   <button
@@ -333,30 +353,37 @@ export default function Signup() {
                     )}
                   </button>
                 </div>
+                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
               </div>
 
               {/* Terms and Conditions */}
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={agreeTerms}
-                  onChange={(e) => setAgreeTerms(e.target.checked)}
-                  className="w-4 h-4 accent-purple-600 rounded"
-                  required
-                />
-                <label htmlFor="terms" className="text-sm text-gray-600">
-                  I agree to the{" "}
-                  <span className="text-purple-600 font-medium">
-                    Terms & Conditions
-                  </span>
-                </label>
+              <div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    checked={agreeTerms}
+                    onChange={(e) => {
+                      setAgreeTerms(e.target.checked);
+                      if (errors.terms) setErrors((prev) => ({ ...prev, terms: "" }));
+                    }}
+                    className={`w-4 h-4 accent-purple-600 rounded ${errors.terms ? 'outline outline-1 outline-red-500' : ''}`}
+                    required
+                  />
+                  <label htmlFor="terms" className="text-sm text-gray-600">
+                    I agree to the{" "}
+                    <span className="text-purple-600 font-medium">
+                      Terms & Conditions
+                    </span>
+                  </label>
+                </div>
+                {errors.terms && <p className="text-red-500 text-xs mt-1">{errors.terms}</p>}
               </div>
 
               {/* Signup Button */}
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !isFormValid()}
                 className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition font-semibold disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (

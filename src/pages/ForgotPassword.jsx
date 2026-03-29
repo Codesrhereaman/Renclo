@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
-import { initForgotPasswordAnimations } from '../animations/forgotPasswordAnimations';
+
 import { Mail, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context api/AuthContext';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
 export default function ForgotPassword() {
+  const { resetPassword } = useAuth();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    initForgotPasswordAnimations();
+
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -26,20 +28,18 @@ export default function ForgotPassword() {
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const userExists = users.some(u => u.email === email);
-
-      if (userExists) {
-        // In production, this would send an email
-        localStorage.setItem('resetEmail', email);
-        setSubmitted(true);
-      } else {
+    try {
+      await resetPassword(email);
+      setSubmitted(true);
+    } catch (err) {
+      if (err.message.toLowerCase().includes('not found')) {
         setError('No account found with this email address');
+      } else {
+        setError(err.message || 'Failed to send password reset email');
       }
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   if (submitted) {
@@ -58,16 +58,12 @@ export default function ForgotPassword() {
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
               
+              
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h1>
               <p className="text-gray-600 mb-4">
-                We've sent password reset instructions to <strong>{email}</strong>
+                We've sent a password reset link to <strong>{email}</strong>.
+                It may take a few minutes to arrive. Check your spam folder if you don't see it.
               </p>
-              
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left">
-                <p className="text-sm text-blue-900">
-                  <strong>Note:</strong> In a production app, you would receive an email with a link to reset your password. For demo purposes, you can <Link to="/reset-password" className="text-blue-600 font-medium hover:underline">reset your password here</Link>.
-                </p>
-              </div>
 
               <Link
                 to="/login"

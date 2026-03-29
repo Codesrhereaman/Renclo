@@ -1,7 +1,7 @@
 import { ShoppingCart, Trash2, Plus, Minus, ShoppingBag, ArrowRight, Calendar } from 'lucide-react';
 import { useEffect } from 'react';
 import { useCart } from '../context api/CartContext';
-import { initCartAnimations } from '../animations/cartAnimations';
+
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +11,9 @@ function CartItem({ item }) {
   const itemTotal = item.rentalPrice * item.quantity * (item.rentalDays / (item.duration || 3));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 md:p-6 flex flex-col md:flex-row gap-4">
+    <div className="bg-white rounded-lg shadow-md p-3 sm:p-6 flex flex-col md:flex-row gap-3 sm:gap-4">
       {/* Image */}
-      <div className="w-full md:w-32 h-32 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+      <div className="w-full sm:w-24 md:w-32 h-24 sm:h-24 md:h-32 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
         <img 
           src={item.image} 
           alt={item.name}
@@ -30,7 +30,7 @@ function CartItem({ item }) {
           </div>
           <button
             onClick={() => removeFromCart(item.id)}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+            className="p-2 sm:p-3 text-red-600 hover:bg-red-50 rounded-lg transition"
             title="Remove from cart"
           >
             <Trash2 className="w-5 h-5" />
@@ -44,14 +44,14 @@ function CartItem({ item }) {
             <div className="flex items-center gap-2 border border-gray-300 rounded-lg">
               <button
                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                className="p-2 hover:bg-gray-100 transition"
+                className="p-1 sm:p-2 hover:bg-gray-100 transition"
               >
                 <Minus className="w-4 h-4" />
               </button>
               <span className="px-4 font-bold">{item.quantity}</span>
               <button
                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                className="p-2 hover:bg-gray-100 transition"
+                className="p-1 sm:p-2 hover:bg-gray-100 transition"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -94,7 +94,7 @@ export default function Cart() {
   const grandTotal = total + tax + deliveryFee;
 
   useEffect(() => {
-    initCartAnimations();
+
   }, []);
 
   return (
@@ -102,13 +102,13 @@ export default function Cart() {
       <Header />
 
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 py-8 md:py-12">
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 py-6 sm:py-8 md:py-12">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <ShoppingCart className="w-8 h-8 text-white" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Shopping Cart</h1>
+            <ShoppingCart className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">Shopping Cart</h1>
           </div>
-          <p className="text-gray-100 text-sm md:text-base">
+          <p className="text-gray-100 text-xs sm:text-sm md:text-base">
             {cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
@@ -138,7 +138,7 @@ export default function Cart() {
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
+              <div className="bg-white rounded-lg shadow-md p-6 sticky top-20 md:top-24">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
                 
                 <div className="space-y-3 mb-6">

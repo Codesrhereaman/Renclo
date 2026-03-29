@@ -9,15 +9,15 @@ export default function CategorySection() {
       title: 'Womenswear',
       subtitle: 'From Designer Lehengas to Elegant Gowns',
       image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&fit=crop',
-      colSpan: 'lg:col-span-8',
+      imagePosition: 'object-center',
       link: '/women'
     },
     {
       id: 'jewelry',
       title: 'Luxe Jewelry',
       subtitle: 'Premium AI-matched Accessories',
-      image: 'https://images.unsplash.com/photo-1599643478524-fb66f7f29136?w=800&fit=crop',
-      colSpan: 'lg:col-span-4',
+      image: 'https://images.unsplash.com/photo-1651160670627-2896ddf7822f?w=600&auto=format&fit=crop&w=800&q=80',
+      imagePosition: 'object-bottom',
       link: '/accessories'
     },
     {
@@ -25,53 +25,54 @@ export default function CategorySection() {
       title: 'Menswear Couture',
       subtitle: 'Precision Tailored Suits & Sherwanis',
       image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&fit=crop',
-      colSpan: 'lg:col-span-12',
+      imagePosition: 'object-top',
       link: '/men'
     }
   ];
 
   return (
-    <section className="py-16 lg:py-20 bg-slate-50 relative">
-      <div className="container mx-auto px-4 md:px-6">
-        
-        <FadeIn className="text-center mb-16">
-          <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-4">
-            Shop by <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text">Category</span>
+    <section className="category-section py-8 sm:py-16 lg:py-20 bg-slate-50 relative">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6">
+
+        <FadeIn className="text-center mb-10 md:mb-16">
+          <h2 className="category-section-title section-title text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 mb-4">
+            Shop by <span className="text-[#a84c75]">Category</span>
           </h2>
-          <p className="text-lg text-slate-600 font-medium max-w-2xl mx-auto">
+          <p className="category-section-desc text-base sm:text-lg text-slate-600 font-medium max-w-2xl mx-auto">
             Explore curated collections designed to make you the center of attention. Every piece is thoroughly dry-cleaned, insured, and ready for you.
           </p>
         </FadeIn>
 
         <StaggerContainer>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[500px] lg:h-[450px]">
+          <div className="category-grid grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-[350px] sm:min-h-[400px] lg:min-h-[500px]">
             {categories.map((category) => (
-              <FadeIn key={category.id} className={`${category.colSpan} h-full`}>
-                <Link to={category.link} className="block relative w-full h-full rounded-[32px] overflow-hidden group cursor-pointer shadow-xl border border-slate-200/50">
+              <FadeIn key={category.id} className="h-full">
+                <Link to={category.link} className="category-card block relative w-full h-full rounded-[24px] md:rounded-[32px] overflow-hidden group cursor-pointer shadow-lg hover:shadow-xl border border-slate-200/50 transition-shadow duration-300">
                   {/* Background Image */}
-                  <img 
-                    src={category.image} 
-                    alt={category.title} 
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                  <img
+                    src={category.image}
+                    alt={category.title}
+                    className={`absolute inset-0 w-full h-full object-cover ${category.imagePosition} transition-transform duration-[1.5s] ease-out group-hover:scale-105`}
                   />
-                  
-                  {/* Dynamic Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent group-hover:from-slate-900 transition-colors duration-500"></div>
 
-                  {/* Top Right Decorative Arrow */}
-                  <div className="absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center -translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 border border-white/30 text-white">
-                    <ArrowUpRight className="w-6 h-6" />
-                  </div>
+                  {/* Dynamic Dark Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent bottom-0"></div>
 
                   {/* Content Container */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <div className="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100"></div>
-                    <h3 className="text-3xl lg:text-4xl font-black text-white mb-2 tracking-tight">
-                      {category.title}
-                    </h3>
-                    <p className="text-slate-200 text-lg font-medium">
-                      {category.subtitle}
-                    </p>
+                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 flex items-end justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 md:mb-2 tracking-tight">
+                        {category.title}
+                      </h3>
+                      <p className="text-slate-200 text-sm md:text-base font-normal">
+                        {category.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Bottom Right Decorative Arrow */}
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-900 group-hover:bg-white group-hover:scale-110 transition-all duration-300 shrink-0">
+                      <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
+                    </div>
                   </div>
                 </Link>
               </FadeIn>

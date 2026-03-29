@@ -1,6 +1,6 @@
 import { Plus, QrCode } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { initOwnerDashboardAnimations } from '../animations/ownerDashboardAnimations';
+
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import StatsCard from '../components/dashboard/StatsCard';
@@ -25,7 +25,7 @@ export default function OwnerDashboard() {
   const [pendingPayout, setPendingPayout] = useState(0);
 
   useEffect(() => {
-    initOwnerDashboardAnimations();
+
     fetchInventory();
   }, []);
 

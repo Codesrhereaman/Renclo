@@ -43,7 +43,7 @@ export default function AiTryOnSection() {
   };
 
   return (
-    <section className="py-16 lg:py-20 bg-slate-50 relative overflow-hidden">
+    <section className="tryon-section py-10 lg:py-20 bg-slate-50 relative overflow-hidden">
       {/* Light background with glowing meshes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-multiply">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-purple-200 rounded-full blur-[150px] opacity-60"></div>
@@ -51,11 +51,11 @@ export default function AiTryOnSection() {
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <FadeIn className="text-center mb-10 lg:mb-6">
-          <h2 className="section-title text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 mb-6">
+        <FadeIn className="text-center mb-6 lg:mb-6">
+          <h2 className="tryon-heading section-title text-3xl md:text-5xl lg:text-7xl font-black text-slate-900 mb-3 md:mb-6">
             Virtual <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text">Try-On</span>
           </h2>
-          <p className="text-lg md:text-2xl text-slate-600 font-medium max-w-2xl mx-auto">
+          <p className="tryon-subtext text-sm md:text-2xl text-slate-600 font-medium max-w-2xl mx-auto">
             Upload your photo, select an occasion, and let our AI generate your perfect outfit instantly.
           </p>
         </FadeIn>
@@ -64,20 +64,20 @@ export default function AiTryOnSection() {
           
           {/* Left Side: Upload Interface */}
           <FadeIn delay={0.2}>
-            <div className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-[32px] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group">
+            <div className="tryon-upload-card bg-white/80 backdrop-blur-xl border border-white/50 rounded-[32px] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-pink-500/10 blur-2xl rounded-full"></div>
               
-              <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+              <h3 className="tryon-step-title text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-600 text-sm">1</span>
                 <span>Select Occasion</span>
               </h3>
               
-              <div className="flex flex-wrap gap-3 mb-6">
+              <div className="tryon-occasions flex flex-wrap gap-3 mb-6">
                 {occasions.map(occ => (
                   <button 
                     key={occ}
                     onClick={() => { setSelectedOccasion(occ); setPreviewGenerated(false); }}
-                    className={`px-4 py-2 rounded-full border text-sm font-medium transition-all ${
+                    className={`tryon-occasion-btn px-4 py-3 md:py-2 min-h-[44px] md:min-h-[40px] rounded-full border text-sm font-medium transition-all ${
                       selectedOccasion === occ 
                       ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white border-transparent shadow-lg shadow-purple-500/20' 
                       : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300'
@@ -88,13 +88,13 @@ export default function AiTryOnSection() {
                 ))}
               </div>
 
-              <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-pink-100 text-pink-600 text-sm">2</span>
+              <h3 className="tryon-step-title text-lg md:text-2xl font-bold text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+                <span className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-pink-100 text-pink-600 text-xs md:text-sm">2</span>
                 <span>Upload Your Photo</span>
               </h3>
 
               <div 
-                className={`relative w-full h-64 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 overflow-hidden ${
+                className={`tryon-drop-zone relative w-full h-44 md:h-64 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 overflow-hidden ${
                   isHovering || isSimulating || previewGenerated
                   ? 'border-purple-500 bg-purple-50' 
                   : 'border-slate-300 bg-slate-50 hover:bg-slate-100 hover:border-slate-400'
@@ -105,11 +105,11 @@ export default function AiTryOnSection() {
               >
                 {!isSimulating && !previewGenerated && (
                    <div className="flex flex-col items-center text-center p-6 z-10 transition-transform duration-300 group-hover:-translate-y-2">
-                     <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-slate-400 mb-4 shadow-sm group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors border border-slate-100">
+                     <div className="upload-icon-wrap w-16 h-16 rounded-full bg-white flex items-center justify-center text-slate-400 mb-4 shadow-sm group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors border border-slate-100">
                        <Upload className="w-8 h-8" />
                      </div>
-                     <p className="text-slate-800 font-medium text-lg mb-1">Click to Upload Image</p>
-                     <p className="text-slate-500 text-sm">PNG, JPG up to 10MB</p>
+                     <p className="tryon-drop-text-primary text-slate-800 font-medium text-lg mb-1">Click to Upload Image</p>
+                     <p className="tryon-drop-text-secondary text-slate-500 text-sm">PNG, JPG up to 10MB</p>
                    </div>
                 )}
                 
@@ -137,13 +137,13 @@ export default function AiTryOnSection() {
           </FadeIn>
 
           {/* Right Side: AI Generated Mockup */}
-          <FadeIn delay={0.4}>
-            <div className="relative">
+          <FadeIn delay={0.4} className="w-full">
+            <div className="relative w-full h-full mx-auto">
               {/* Decorative wireframe/tech lines behind image */}
-              <div className="absolute inset-[-20px] border border-slate-300 rounded-[48px] border-dashed animate-[spin_60s_linear_infinite] pointer-events-none opacity-50"></div>
-              <div className="absolute inset-[-40px] border border-slate-200 rounded-full border-dashed animate-[spin_80s_reverse_linear_infinite] pointer-events-none opacity-50 hidden md:block"></div>
+              <div className="tryon-ring-outer hidden md:block absolute inset-[-20px] border border-slate-300 rounded-[48px] border-dashed animate-[spin_60s_linear_infinite] pointer-events-none opacity-50"></div>
+              <div className="tryon-ring-inner hidden md:block absolute inset-[-40px] border border-slate-200 rounded-full border-dashed animate-[spin_80s_reverse_linear_infinite] pointer-events-none opacity-50"></div>
 
-              <div className="relative aspect-[3/4] md:aspect-square lg:aspect-[5/5] bg-slate-100 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(168,85,247,0.15)] border border-slate-200">
+              <div className="tryon-result-panel relative w-full aspect-[3/4] md:aspect-square lg:aspect-[4/5] bg-slate-100 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(168,85,247,0.15)] border border-slate-200 mt-2 lg:mt-0">
                 {!previewGenerated ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-slate-50">
                     <div className="w-24 h-24 mb-6 relative">
@@ -163,22 +163,22 @@ export default function AiTryOnSection() {
                        className="w-full h-full object-cover transition-transform duration-1000 scale-100 animate-in fade-in zoom-in-50 hover:scale-[1.03]" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-transparent to-transparent pointer-events-none"></div>
-                    <div className="absolute bottom-[-1px] left-[-1px] right-[-1px] bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent p-6 md:p-8 pt-32">
+                    <div className="tryon-result-content absolute bottom-[-1px] left-[-1px] right-[-1px] bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent p-6 md:p-8 pt-32">
                       <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white text-xs font-bold uppercase tracking-wider mb-4 animate-[bounce_2s_infinite]">
                         Top Match Generated
                       </div>
-                      <h3 className="text-3xl lg:text-4xl font-black text-white mb-2 leading-tight">
+                      <h3 className="tryon-result-title text-3xl lg:text-4xl font-black text-white mb-2 leading-tight">
                         {outfitData[selectedOccasion].title}
                       </h3>
-                      <p className="text-gray-300 font-medium text-lg mb-6">
+                      <p className="tryon-result-subtitle text-gray-300 font-medium text-lg mb-6">
                         Perfectly styled for <span className="text-white font-bold">{selectedOccasion}</span>
                       </p>
                       
-                      <div className="flex gap-4 items-center">
-                        <button className="flex-1 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                      <div className="tryon-result-actions flex gap-4 items-center">
+                        <button className="tryon-result-rent-btn flex-1 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                           Rent This Outfit
                         </button>
-                        <button className="w-14 h-14 rounded-xl border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition backdrop-blur-md">
+                        <button className="tryon-result-arrow-btn w-14 h-14 rounded-xl border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition backdrop-blur-md">
                           <ArrowRight className="w-6 h-6" />
                         </button>
                       </div>

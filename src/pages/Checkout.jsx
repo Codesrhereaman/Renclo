@@ -19,7 +19,7 @@ import {
   Lock,
   ArrowLeft
 } from 'lucide-react';
-import { initCheckoutAnimations } from '../animations/checkoutAnimations';
+
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ export default function Checkout() {
     
     // Small delay to ensure DOM is ready
     const timer = setTimeout(() => {
-      initCheckoutAnimations();
+
     }, 100);
 
     return () => clearTimeout(timer);
@@ -232,27 +232,27 @@ export default function Checkout() {
       <Header />
 
       {/* Progress Bar */}
-      <div className="bg-white border-b sticky top-16 z-40">
-        <div className="container mx-auto px-4 md:px-6 py-4">
+      <div className="bg-white border-b sticky top-16 md:top-20 z-40">
+        <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between max-w-2xl mx-auto">
             <div className="flex-1">
-              <div className={`flex items-center gap-2 pb-2 ${currentStep >= 1 ? 'text-purple-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${currentStep >= 1 ? 'bg-purple-600 text-white' : 'bg-gray-300'}`}>
+              <div className={`flex items-center gap-1 md:gap-2 pb-2 ${currentStep >= 1 ? 'text-purple-600' : 'text-gray-400'}`}>
+                <div className={`w-7 md:w-8 h-7 md:h-8 rounded-full flex items-center justify-center font-bold text-sm md:text-base ${currentStep >= 1 ? 'bg-purple-600 text-white' : 'bg-gray-300'}`}>
                   1
                 </div>
-                <span className="font-semibold hidden md:inline">Shipping</span>
+                <span className="font-semibold hidden md:inline text-sm">Shipping</span>
               </div>
               {currentStep >= 1 && <div className="h-1 bg-purple-600 rounded"></div>}
             </div>
 
-            <ChevronRight className={`w-5 h-5 mx-2 ${currentStep >= 2 ? 'text-purple-600' : 'text-gray-400'}`} />
+            <ChevronRight className={`w-4 md:w-5 h-4 md:h-5 mx-1 md:mx-2 ${currentStep >= 2 ? 'text-purple-600' : 'text-gray-400'}`} />
 
             <div className="flex-1">
-              <div className={`flex items-center gap-2 pb-2 ${currentStep >= 2 ? 'text-purple-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${currentStep >= 2 ? 'bg-purple-600 text-white' : 'bg-gray-300'}`}>
+              <div className={`flex items-center gap-1 md:gap-2 pb-2 ${currentStep >= 2 ? 'text-purple-600' : 'text-gray-400'}`}>
+                <div className={`w-7 md:w-8 h-7 md:h-8 rounded-full flex items-center justify-center font-bold text-sm md:text-base ${currentStep >= 2 ? 'bg-purple-600 text-white' : 'bg-gray-300'}`}>
                   2
                 </div>
-                <span className="font-semibold hidden md:inline">Payment</span>
+                <span className="font-semibold hidden md:inline text-sm">Payment</span>
               </div>
               {currentStep >= 2 && <div className="h-1 bg-purple-600 rounded"></div>}
             </div>
@@ -286,11 +286,11 @@ export default function Checkout() {
                 // Shipping Address Form
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-                      <MapPin className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+                      <MapPin className="w-5 sm:w-6 h-5 sm:h-6 text-purple-600" />
                       Shipping Address
                     </h2>
-                    <p className="text-gray-600 text-sm">Enter your delivery address</p>
+                    <p className="text-gray-600 text-xs sm:text-sm">Enter your delivery address</p>
                   </div>
 
                   <form className="space-y-4">
@@ -304,7 +304,7 @@ export default function Checkout() {
                           value={address.fullName}
                           onChange={handleAddressChange}
                           placeholder="Your full name"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                       </div>
                       <div>
@@ -315,7 +315,7 @@ export default function Checkout() {
                           value={address.email}
                           onChange={handleAddressChange}
                           placeholder="Your email"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                       </div>
                     </div>
@@ -333,7 +333,7 @@ export default function Checkout() {
                         onChange={handleAddressChange}
                         placeholder="10-digit phone number"
                         maxLength="10"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                       />
                     </div>
 
@@ -346,7 +346,7 @@ export default function Checkout() {
                         value={address.addressLine1}
                         onChange={handleAddressChange}
                         placeholder="Street address"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                       />
                     </div>
 
@@ -358,7 +358,7 @@ export default function Checkout() {
                         value={address.addressLine2}
                         onChange={handleAddressChange}
                         placeholder="Apartment, suite, etc."
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                       />
                     </div>
 
@@ -372,7 +372,7 @@ export default function Checkout() {
                           value={address.city}
                           onChange={handleAddressChange}
                           placeholder="City"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                       </div>
                       <div>
@@ -383,7 +383,7 @@ export default function Checkout() {
                           value={address.state}
                           onChange={handleAddressChange}
                           placeholder="State"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                       </div>
                       <div>
@@ -395,7 +395,7 @@ export default function Checkout() {
                           onChange={handleAddressChange}
                           placeholder="6-digit pincode"
                           maxLength="6"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                       </div>
                     </div>
@@ -514,7 +514,7 @@ export default function Checkout() {
                   {paymentMethod === 'credit-card' && (
                     <div className="space-y-4 pt-6 border-t">
                       <h3 className="font-bold text-gray-900">Card Details</h3>
-                      
+
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Cardholder Name</label>
                         <input
@@ -523,7 +523,7 @@ export default function Checkout() {
                           value={cardDetails.cardHolder}
                           onChange={handleCardChange}
                           placeholder="Name on card"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                       </div>
 
@@ -536,7 +536,7 @@ export default function Checkout() {
                           onChange={handleCardChange}
                           placeholder="1234 5678 9012 3456"
                           maxLength="19"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition font-mono"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition font-mono"
                         />
                       </div>
 
@@ -547,7 +547,7 @@ export default function Checkout() {
                             name="expiryMonth"
                             value={cardDetails.expiryMonth}
                             onChange={handleCardChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                           >
                             <option value="">MM</option>
                             {Array.from({ length: 12 }, (_, i) => (
@@ -564,7 +564,7 @@ export default function Checkout() {
                             name="expiryYear"
                             value={cardDetails.expiryYear}
                             onChange={handleCardChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                           >
                             <option value="">YY</option>
                             {Array.from({ length: 10 }, (_, i) => {
@@ -587,7 +587,7 @@ export default function Checkout() {
                             onChange={handleCardChange}
                             placeholder="123"
                             maxLength="4"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition font-mono"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition font-mono"
                           />
                         </div>
                       </div>
@@ -607,7 +607,7 @@ export default function Checkout() {
                             setError('');
                           }}
                           placeholder="yourname@upi (e.g., john@okhdfcbank)"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
                         />
                         <p className="text-xs text-gray-600 mt-2">Supports Google Pay, PhonePe, Paytm, WhatsApp Pay</p>
                       </div>

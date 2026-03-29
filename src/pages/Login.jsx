@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Eye, EyeOff, Mail, Lock, CheckCircle, AlertCircle } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context api/AuthContext';
-import { initLoginAnimations } from '../animations/loginAnimations';
+
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import toast from 'react-hot-toast';
@@ -24,11 +24,17 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    initLoginAnimations();
+    // If remember me was checked previously, populate the email
+    const savedEmail = localStorage.getItem('rememberEmail');
+    if (savedEmail) {
+      setFormData(prev => ({ ...prev, email: savedEmail }));
+      setRememberMe(true);
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -37,24 +43,40 @@ export default function Login() {
       ...prev,
       [name]: value
     }));
+    
+    // Clear field-specific error when user types
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
     setError('');
   };
 
+  const isFormValid = () => {
+    return (
+      formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) &&
+      formData.password.length >= 6
+    );
+  };
+
   const validateForm = () => {
+    const newErrors = {};
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError('Please enter a valid email address');
-      return false;
+      newErrors.email = 'Please enter a valid email address';
     }
-    if (formData.password.length < 6) {
-      setError('Please enter your password');
-      return false;
+    if (!formData.password) {
+      newErrors.password = 'Please enter your password';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
     }
-    return true;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+    
     setLoading(true);
     try {
       await login(formData.email, formData.password);
@@ -67,7 +89,14 @@ export default function Login() {
       const redirectTo = location.state?.from?.pathname || '/';
       setTimeout(() => navigate(redirectTo, { replace: true }), 800);
     } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      const msg = err.message || 'Login failed. Please check your credentials.';
+      if (msg.toLowerCase().includes("email") || msg.toLowerCase().includes("not found")) {
+        setErrors((prev) => ({ ...prev, email: msg }));
+      } else if (msg.toLowerCase().includes("password")) {
+        setErrors((prev) => ({ ...prev, password: msg }));
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -105,6 +134,8 @@ export default function Login() {
       email: 'demo@example.com',
       password: 'Demo@123'
     });
+    setErrors({});
+    setError('');
   };
 
   return (
@@ -126,7 +157,7 @@ export default function Login() {
               <p className="text-gray-600">Sign in to your WardroWave account</p>
             </div>
 
-            {/* Error Message */}
+            {/* General Error Message */}
             {error && (
               <div className="mb-6 p-4 rounded-lg flex items-center gap-3 bg-red-100 text-red-800 border border-red-300">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -156,10 +187,11 @@ export default function Login() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="your@email.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                 </div>
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
               {/* Password Input */}
@@ -173,7 +205,7 @@ export default function Login() {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-600'}`}
                     required
                   />
                   <button
@@ -184,6 +216,7 @@ export default function Login() {
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
               </div>
 
               {/* Remember Me & Forgot Password */}
@@ -208,7 +241,7 @@ export default function Login() {
               {/* Sign In Button */}
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !isFormValid()}
                 className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition font-semibold disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
@@ -259,6 +292,11 @@ export default function Login() {
                   </svg>
                   Facebook
                 </button>
+              </div>
+
+              {/* Demo Fill Link (Development only basically) */}
+              <div className="mt-4 flex justify-center">
+                 {/* Only showing this to match original component design implicitly, removed or kept clean. I will just keep the function demo call */}
               </div>
 
               {/* Sign Up Link */}

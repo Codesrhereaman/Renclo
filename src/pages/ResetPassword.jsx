@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { initResetPasswordAnimations } from '../animations/resetPasswordAnimations';
+
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
@@ -22,7 +22,7 @@ export default function ResetPassword() {
     if (!resetEmail) {
       setError('Invalid reset request. Please request a new password reset.');
     }
-    initResetPasswordAnimations();
+
   }, []);
 
   const handlePasswordChange = (e) => {

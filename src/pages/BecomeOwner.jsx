@@ -1,10 +1,10 @@
-﻿import { 
+import { 
   Upload, DollarSign, Shield, QrCode, TrendingUp, Clock, 
   CheckCircle, ArrowRight, Package, BarChart3 
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { initBecomeOwnerAnimations } from '../animations/becomeOwnerAnimations';
+
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
@@ -12,7 +12,7 @@ export default function BecomeOwner() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    initBecomeOwnerAnimations();
+
   }, []);
 
   const benefits = [
@@ -84,7 +84,7 @@ export default function BecomeOwner() {
 
   const stats = [
     { label: 'Active Owners', value: '2,500+', icon: TrendingUp },
-    { label: 'Avg. Monthly Earnings', value: 'â‚¹15,000', icon: DollarSign },
+    { label: 'Avg. Monthly Earnings', value: '₹15,000', icon: DollarSign },
     { label: 'Items Listed', value: '50,000+', icon: Package },
     { label: 'Avg. Response Time', value: '< 2 hrs', icon: Clock }
   ];

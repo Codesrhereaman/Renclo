@@ -95,7 +95,7 @@ export default function HeroSection() {
           </div>
           
           {/* Image */}
-          <div className="relative w-full max-w-[500px] mx-auto h-[400px] md:h-[450px] lg:h-[550px] hidden md:block" ref={imageRef}>
+          <div className="relative w-full max-w-[500px] mx-auto h-[350px] sm:h-[400px] md:h-[450px] lg:h-[550px] mt-8 md:mt-0" ref={imageRef}>
             <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400 rounded-[32px] blur-3xl opacity-30 mix-blend-multiply"></div>
             <img 
               src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&h=800&fit=crop&q=80" 
@@ -104,10 +104,10 @@ export default function HeroSection() {
               loading="eager"
             />
             {/* Floating price badge */}
-            <div className="absolute bottom-10 left-[-30px] z-20 glass rounded-2xl px-6 py-4 shadow-xl float-badge border border-white/60">
-              <p className="text-xs text-gray-800 font-bold uppercase tracking-wider mb-1">Rent from just</p>
-              <p className="text-3xl font-black text-gradient">₹299/day</p>
-              <p className="text-xs text-gray-500 font-medium mt-1">vs ₹3,000+ retail price</p>
+            <div className="absolute bottom-6 left-[-10px] md:bottom-10 md:left-[-30px] z-20 glass rounded-2xl px-5 md:px-6 py-3 md:py-4 shadow-xl float-badge border border-white/60">
+              <p className="text-[10px] md:text-xs text-gray-800 font-bold uppercase tracking-wider mb-0.5 md:mb-1">Rent from just</p>
+              <p className="text-2xl md:text-3xl font-black text-gradient">₹299/day</p>
+              <p className="text-[10px] md:text-xs text-gray-500 font-medium mt-0.5 md:mt-1">vs ₹3,000+ retail price</p>
             </div>
           </div>
           

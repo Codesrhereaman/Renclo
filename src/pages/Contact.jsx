@@ -1,5 +1,5 @@
-﻿import { useEffect } from 'react';
-import { initContactAnimations } from '../animations/contactAnimations';
+import { useEffect } from 'react';
+
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import ContactInfo from '../components/contact/ContactInfo';
@@ -9,7 +9,7 @@ import SocialMedia from '../components/contact/SocialMedia';
 
 export default function Contact() {
   useEffect(() => {
-    initContactAnimations();
+
   }, []);
 
   return (

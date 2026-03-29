@@ -1,7 +1,7 @@
 import { Heart, ShoppingCart, Star, Trash2, ShoppingBag } from 'lucide-react';
 import { useEffect } from 'react';
 import { useWishlist } from '../context api/WishlistContext';
-import { initWishlistAnimations } from '../animations/wishlistAnimations';
+
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -72,7 +72,7 @@ export default function Wishlist() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    initWishlistAnimations();
+
   }, []);
 
   return (

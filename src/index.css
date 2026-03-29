@@ -1,33 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+@import "./responsive.css";
 
 /* ── Design Tokens ─────────────────────────────────────────────── */
 :root {
-  --color-primary:    #9333ea;   /* purple-600 */
-  --color-primary-dk: #7e22ce;   /* purple-700 */
-  --color-accent:     #ec4899;   /* pink-500 */
-  --color-accent-dk:  #db2777;   /* pink-600 */
-  --color-surface:    #ffffff;
-  --color-bg:         #f8fafc;   /* slate-50 */
-  --color-text:       #0f172a;   /* slate-900 */
-  --color-muted:      #64748b;   /* slate-500 */
-  --color-border:     #e2e8f0;   /* slate-200 */
+  --color-primary: #9333ea;
+  /* purple-600 */
+  --color-primary-dk: #7e22ce;
+  /* purple-700 */
+  --color-accent: #ec4899;
+  /* pink-500 */
+  --color-accent-dk: #db2777;
+  /* pink-600 */
+  --color-surface: #ffffff;
+  --color-bg: #f8fafc;
+  /* slate-50 */
+  --color-text: #0f172a;
+  /* slate-900 */
+  --color-muted: #64748b;
+  /* slate-500 */
+  --color-border: #e2e8f0;
+  /* slate-200 */
   --gradient-brand: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
-  --shadow-md:  0 4px 16px rgba(0,0,0,.10);
-  --shadow-lg:  0 12px 32px rgba(0,0,0,.15);
-  --shadow-card: 0 4px 20px rgba(147,51,234,.12);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, .15);
+  --shadow-card: 0 4px 20px rgba(147, 51, 234, .12);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-xl: 28px;
-  --transition-fast: 150ms cubic-bezier(.4,0,.2,1);
-  --transition-base: 250ms cubic-bezier(.4,0,.2,1);
-  --transition-slow: 400ms cubic-bezier(.4,0,.2,1);
+  --transition-fast: 150ms cubic-bezier(.4, 0, .2, 1);
+  --transition-base: 250ms cubic-bezier(.4, 0, .2, 1);
+  --transition-slow: 400ms cubic-bezier(.4, 0, .2, 1);
 }
 
 /* ── Base Reset ────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; max-width: 100%; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  max-width: 100%;
+}
 
 html {
   scroll-behavior: smooth;
@@ -46,8 +60,13 @@ body {
 
 /* ── Skeleton shimmer animation ────────────────────────────────── */
 @keyframes shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position:  600px 0; }
+  0% {
+    background-position: -600px 0;
+  }
+
+  100% {
+    background-position: 600px 0;
+  }
 }
 
 .skeleton {
@@ -59,28 +78,51 @@ body {
 
 /* ── Floating badge pulse ──────────────────────────────────────── */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
-.float-badge { animation: float 3s ease-in-out infinite; }
+.float-badge {
+  animation: float 3s ease-in-out infinite;
+}
 
 /* ── Custom scrollbar ──────────────────────────────────────────── */
-::-webkit-scrollbar { width: 7px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
   border-radius: 4px;
 }
 
 /* ── Page-transition helpers ───────────────────────────────────── */
-.page-enter  { opacity: 0; transform: translateY(16px); }
-.page-exit   { opacity: 0; transform: translateY(-8px); }
+.page-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.page-exit {
+  opacity: 0;
+  transform: translateY(-8px);
+}
 
 /* ── Card hover lift ───────────────────────────────────────────── */
 .card-lift {
   transition: box-shadow var(--transition-base), transform var(--transition-base);
 }
+
 .card-lift:hover {
   box-shadow: var(--shadow-card);
   transform: translateY(-4px);
@@ -108,14 +150,26 @@ body {
   align-items: center;
   gap: 8px;
 }
+
 .btn-primary:hover {
-  box-shadow: 0 8px 24px rgba(147,51,234,.40);
+  box-shadow: 0 8px 24px rgba(147, 51, 234, .40);
   transform: translateY(-1px);
 }
-.btn-primary:active { transform: translateY(0); }
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.95);
+}
+
+button:active, 
+.cursor-pointer:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease-out;
+}
 
 /* ── Image fade-in ─────────────────────────────────────────────── */
-img { color: transparent; }
+img {
+  color: transparent;
+}
 
 /* ── Focus ring ────────────────────────────────────────────────── */
 :focus-visible {
@@ -132,10 +186,10 @@ img { color: transparent; }
 
 /* ── Glass card ────────────────────────────────────────────────── */
 .glass {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 /* ── Price range slider ────────────────────────────────────────── */
@@ -148,18 +202,23 @@ input[type="range"] {
   outline: none;
   width: 100%;
 }
+
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px; height: 18px;
+  width: 18px;
+  height: 18px;
   background: var(--color-primary);
   border-radius: 50%;
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 2px 6px rgba(147,51,234,.4);
+  box-shadow: 0 2px 6px rgba(147, 51, 234, .4);
 }
 
 /* ── Tooltip ───────────────────────────────────────────────────── */
-[data-tooltip] { position: relative; }
+[data-tooltip] {
+  position: relative;
+}
+
 [data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -177,25 +236,43 @@ input[type="range"]::-webkit-slider-thumb {
   transition: opacity 0.15s;
   z-index: 50;
 }
-[data-tooltip]:hover::after { opacity: 1; }
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
 
 /* ── Particle backdrop for hero ────────────────────────────────── */
 @keyframes particle-drift {
-  0%   { transform: translateY(0) rotate(0deg);   opacity: 0.6; }
-  100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 0;
+  }
 }
+
 .particle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
   animation: particle-drift linear infinite;
   pointer-events: none;
 }
 
 /* ── Generic Animations ────────────────────────────────────────── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -203,10 +280,552 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 @keyframes slowZoom {
-  from { transform: scale(1); }
-  to   { transform: scale(1.05); }
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.05);
+  }
 }
 
 .animate-slow-zoom {
   animation: slowZoom 20s linear infinite alternate;
+}
+
+/* ── Mobile-First Responsive Spacing & Enhancements ──────────────── */
+
+/* Fluid Typography Base */
+html {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+
+  /* Compact section spacing for smaller screens */
+  section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  .container {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Fluid Headings for Mobile */
+  h1,
+  .section-title {
+    font-size: clamp(2rem, 8vw, 2.75rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 2.25rem) !important;
+    line-height: 1.25 !important;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.5rem) !important;
+  }
+
+  p {
+    font-size: min(16px, 4.5vw);
+    line-height: 1.6;
+  }
+
+  /* Better Stacked Elements */
+  .space-y-mobile>*+* {
+    margin-top: 1rem;
+  }
+
+  /* Ensure cards take full width nicely */
+  .grid-cols-1>* {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Safe PWA/mobile bottom padding */
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  /* Remove tap highlights for native app feel */
+  * {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Remove horizontal borders that crowd small screens */
+  .border-x-hidden-mobile {
+    border-left: none !important;
+    border-right: none !important;
+  }
+}
+
+/* ── Enforced Minimum Touch Targets ────────────────────────────── */
+@media (pointer: coarse) {
+
+  button,
+  a[class*="btn"],
+  input[type="submit"],
+  .cursor-pointer,
+  [role="button"]:not(.no-touch-resize) {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Prevent iOS zoom on inputs by forcing 16px text */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    min-height: 48px;
+    font-size: 16px !important;
+    padding: 12px 16px;
+  }
+}
+
+/* ── Mobile Scrolling Optimizations ────────────────────────────── */
+.overflow-x-auto,
+.mobile-scroll-x {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.snap-center,
+.snap-start {
+  scroll-snap-stop: always;
+}
+
+/* Elegantly hide scrollbars */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
+/* ── Mobile Form Factors & Shadow Adjustments ──────────────────── */
+@media screen and (max-width: 768px) {
+
+  /* Softer shadows on mobile to reduce visual noise */
+  .shadow-xl,
+  .shadow-2xl {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  /* Optimize blurring for mobile performance */
+  .blur-3xl {
+    filter: blur(40px) !important;
+  }
+
+  .backdrop-blur-xl,
+  .backdrop-blur-md {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Sticky Bottom Navigation / Actions Action Bar */
+  .mobile-action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--color-border);
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 12px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-action-bar.visible {
+    transform: translateY(0);
+  }
+
+  /* Bottom Sheet Overlay */
+  .bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border-radius: 24px 24px 0 0;
+    padding: 24px;
+    z-index: 110;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .bottom-sheet.open {
+    transform: translateY(0);
+  }
+
+  .bottom-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 105;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .bottom-sheet-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ── Safe Area Support for iOS Notches ─────────────────────────── */
+@supports (padding-inline-start: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* ── Mobile Specific Animations ─────────────────────── */
+.mobile-menu-enter {
+  animation: slideDownFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDownFade {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpFade {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Improve rendering and prevent layout shifts */
+img {
+  content-visibility: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Performance rules */
+.gpu-accel {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FeaturedProducts — Mobile 2-col Grid Cards
+   ══════════════════════════════════════════════════════════════ */
+
+/* Grid container */
+.fp-mobile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Card shell */
+.fp-mobile-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.fp-mobile-card:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Image wrapper */
+.fp-mobile-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.fp-mobile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.fp-mobile-card:active .fp-mobile-img {
+  transform: scale(1.04);
+}
+
+/* Dark gradient at bottom of image */
+.fp-mobile-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 10, 30, 0.65) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* Savings badge — top-left */
+.fp-save-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(135deg, #9333ea, #ec4899);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 20px;
+  line-height: 1.4;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(147, 51, 234, 0.4);
+}
+
+/* Wishlist button — top-right */
+.fp-wish-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fp-wish-btn:active {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.08);
+}
+
+/* ── fp-wish-btn responsive sizing ── */
+
+/* Very small phones (≤340px) — keep minimal */
+@media (max-width: 340px) {
+  .fp-wish-btn {
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .fp-wish-btn svg {
+    width: 9px;
+    height: 9px;
+  }
+}
+
+/* Standard mobile (341px – 480px) — default 20px already set */
+
+/* Wider phones / small tablets (481px – 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .fp-wish-btn {
+    top: 7px;
+    right: 7px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .fp-wish-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Desktop (≥768px) — used in editorial card, larger target fine */
+@media (min-width: 768px) {
+  .fp-wish-btn {
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  .fp-wish-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .fp-wish-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.12);
+  }
+}
+
+/* Category pill — bottom of image */
+.fp-cat-pill {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  z-index: 10;
+  line-height: 1.5;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Info section below image */
+.fp-mobile-info {
+  padding: 10px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+/* Product name */
+.fp-mobile-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* Rating row */
+.fp-mobile-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ca8a04;
+}
+
+.fp-review-count {
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 10px;
+}
+
+/* Price row */
+.fp-mobile-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.fp-mobile-price {
+  font-size: 15px;
+  font-weight: 900;
+  color: #7c3aed;
+  line-height: 1;
+}
+
+.fp-mobile-mrp {
+  font-size: 10px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-decoration: line-through;
+  margin-left: 4px;
+}
+
+.fp-rent-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  align-self: flex-end;
+  padding-bottom: 2px;
+}
+
+/* ── Responsive tweaks ── */
+@media (max-width: 340px) {
+  .fp-mobile-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .fp-mobile-name {
+    font-size: 11px;
+  }
+
+  .fp-mobile-price {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .fp-mobile-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
 }

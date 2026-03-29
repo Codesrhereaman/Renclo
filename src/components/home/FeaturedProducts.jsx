@@ -114,8 +114,8 @@ export default function FeaturedProducts() {
       <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[40%] bg-purple-100 rounded-full blur-[100px] opacity-60 pointer-events-none"></div>
 
       <div className="container mx-auto px-4 md:px-6 mb-12 relative z-10">
-        <FadeIn className="flex flex-col md:flex-row justify-between items-end gap-6">
-          <div className="max-w-2xl">
+        <FadeIn className="flex flex-col md:flex-row justify-between items-center md:items-end gap-4 md:gap-6 text-center md:text-left">
+          <div className="max-w-2xl flex flex-col items-center md:items-start">
             <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-pink-50 text-pink-600 font-bold tracking-wider text-xs uppercase mb-4 border border-pink-100">
               <Sparkles className="w-4 h-4" /> Trending AI Matches
             </span>
@@ -125,7 +125,7 @@ export default function FeaturedProducts() {
           </div>
           <Link 
             to="/rentals"
-            className="flex items-center gap-2 text-purple-600 font-bold text-lg hover:text-pink-600 transition-colors group"
+            className="flex items-center justify-center gap-2 text-purple-600 font-bold text-lg hover:text-pink-600 transition-colors group mt-2 md:mt-0"
           >
             Explore Collection <MoveRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
