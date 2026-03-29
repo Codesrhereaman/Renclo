@@ -15,9 +15,13 @@ const initFirebase = () => {
   const { FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY } = process.env;
 
   if (!FIREBASE_PROJECT_ID || !FIREBASE_CLIENT_EMAIL || !FIREBASE_PRIVATE_KEY) {
-    console.error('❌ Missing Firebase credentials in .env');
-    console.error('   Required: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY');
-    process.exit(1);
+    const missing = [];
+    if (!FIREBASE_PROJECT_ID) missing.push('FIREBASE_PROJECT_ID');
+    if (!FIREBASE_CLIENT_EMAIL) missing.push('FIREBASE_CLIENT_EMAIL');
+    if (!FIREBASE_PRIVATE_KEY) missing.push('FIREBASE_PRIVATE_KEY');
+    
+    console.error('❌ Missing Firebase credentials on Vercel Dashboard:', missing.join(', '));
+    throw new Error(`Firebase initialization failed: Missing ${missing.join(', ')}`);
   }
 
   try {
@@ -39,8 +43,8 @@ const initFirebase = () => {
     console.log('✅ Firebase Admin SDK initialized');
     console.log(`📦 Firestore project: ${FIREBASE_PROJECT_ID}`);
   } catch (error) {
-    console.error('❌ Firebase initialization failed:', error.message);
-    process.exit(1);
+    console.error('❌ Firebase initialization crashed:', error.message);
+    throw error;
   }
 };
 
