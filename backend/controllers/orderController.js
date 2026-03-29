@@ -94,6 +94,7 @@ const createOrder = asyncHandler(async (req, res) => {
     items: orderItems,
     shippingAddress: { ...shippingAddress, email: shippingAddress.email || req.user.email },
     pricing,
+    totalAmount: pricing.total,
     payment: {
       method: paymentMethod,
       status: paymentMethod === 'cod' ? 'pending' : 'success',
@@ -135,14 +136,18 @@ const getUserOrders = asyncHandler(async (req, res) => {
   const { status, limit = '10' } = req.query;
 
   let query = db.collection(COLLECTIONS.ORDERS)
-    .where('uid', '==', req.user.uid)
-    .orderBy('createdAt', 'desc')
-    .limit(Math.min(50, parseInt(limit)));
+    .where('uid', '==', req.user.uid);
 
   if (status) query = query.where('status', '==', status);
 
   const snap = await query.get();
-  const orders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  let orders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+  // Sort in memory to avoid needing a Firestore composite index
+  orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+  // Apply limit in memory
+  orders = orders.slice(0, Math.min(50, parseInt(limit)));
 
   res.status(200).json({ success: true, data: { orders, total: orders.length } });
 });

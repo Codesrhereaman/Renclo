@@ -11,28 +11,40 @@ export default function GSAPReveal({ children, stagger = false, className = '' }
   useGSAP(() => {
     if (stagger) {
       const elements = container.current.children;
-      gsap.from(elements, {
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 85%",
+      gsap.fromTo(elements, 
+        {
+          y: 50,
+          opacity: 0,
         },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power3.out",
-      });
+        {
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top 85%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+        }
+      );
     } else {
-      gsap.from(container.current, {
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 85%",
+      gsap.fromTo(container.current, 
+        {
+          y: 50,
+          opacity: 0,
         },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      });
+        {
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top 85%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power3.out",
+        }
+      );
     }
   }, { scope: container });
 

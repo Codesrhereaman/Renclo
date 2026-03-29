@@ -155,8 +155,8 @@ export default function UserProfile() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-3 px-5 py-4 rounded-xl font-bold transition-all text-left w-full ${activeTab === tab.id
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30 translate-x-2'
-                    : 'bg-white text-gray-600 hover:bg-purple-50 hover:text-purple-700 hover:translate-x-1 border border-gray-100 shadow-sm'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30 translate-x-2'
+                  : 'bg-white text-gray-600 hover:bg-purple-50 hover:text-purple-700 hover:translate-x-1 border border-gray-100 shadow-sm'
                   }`}
               >
                 <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-purple-500'}`} />
@@ -259,9 +259,9 @@ export default function UserProfile() {
               {activeTab === 'addresses' && <AddressManagement />}
 
               {activeTab === 'closet' && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-                  <VirtualCloset />
-                </div>
+
+                <VirtualCloset />
+
               )}
             </GSAPTabTransition>
           </div>

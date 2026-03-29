@@ -105,20 +105,27 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log('\n══════════════════════════════════════════════');
-  console.log('  🌊 WardroWave Backend  —  v2.0.0');
-  console.log('══════════════════════════════════════════════');
-  console.log(`  🚀 Server:    http://localhost:${PORT}`);
-  console.log(`  🔥 Database:  Firebase Firestore`);
-  console.log(`  🔐 Auth:      Firebase Authentication`);
-  console.log(`  🌍 Env:       ${process.env.NODE_ENV || 'development'}`);
-  console.log('══════════════════════════════════════════════\n');
-});
+let server;
+if (require.main === module) {
+  server = app.listen(PORT, () => {
+    console.log('\n══════════════════════════════════════════════');
+    console.log('  🌊 WardroWave Backend  —  v2.0.0');
+    console.log('══════════════════════════════════════════════');
+    console.log(`  🚀 Server:    http://localhost:${PORT}`);
+    console.log(`  🔥 Database:  Firebase Firestore`);
+    console.log(`  🔐 Auth:      Firebase Authentication`);
+    console.log(`  🌍 Env:       ${process.env.NODE_ENV || 'development'}`);
+    console.log('══════════════════════════════════════════════\n');
+  });
+}
 
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Rejection:', err.message);
-  server.close(() => process.exit(1));
+  if (server) {
+    server.close(() => process.exit(1));
+  } else {
+    process.exit(1);
+  }
 });
 
 process.on('uncaughtException', (err) => {

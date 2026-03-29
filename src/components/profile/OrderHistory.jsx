@@ -76,7 +76,9 @@ export default function OrderHistory() {
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500 mb-1">Total Amount</p>
-              <p className="text-xl font-black text-gray-900 border-b-2 border-transparent w-fit md:ml-auto focus:border-purple-600 transition-colors">₹{order.totalAmount}</p>
+              <p className="text-xl font-black text-gray-900 border-b-2 border-transparent w-fit md:ml-auto focus:border-purple-600 transition-colors">
+                ₹{order.totalAmount || order.pricing?.total || 0}
+              </p>
             </div>
           </div>
           

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { MapPin, Plus, Trash2, Edit2, Home, Briefcase, Star, Loader2 } from 'lucide-react';
+import { useAuth } from '../../context api/AuthContext';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 
 export default function AddressManagement() {
-  const [addresses, setAddresses] = useState([]);
+  const { user, updateProfile } = useAuth();
+  const [addresses, setAddresses] = useState(user?.addresses || []);
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form State
@@ -25,15 +27,19 @@ export default function AddressManagement() {
     try {
       setLoading(true);
       const res = await api.user.getAddresses();
-      setAddresses(res.data?.addresses || []);
+      const fetched = res.data?.addresses || [];
+      setAddresses(fetched);
+      if (updateProfile) updateProfile({ addresses: fetched }); // sync context
     } catch (err) {
-      toast.error('Failed to load saved addresses');
+      // Intentionally ignore failure if we already have context fallback.
+      if (addresses.length === 0) toast.error('Failed to load saved addresses');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    // We already have user.addresses initially, but we fetch to ensure sync in background
     fetchAddresses();
   }, []);
 
@@ -97,7 +103,7 @@ export default function AddressManagement() {
         <h2 className="text-2xl font-bold text-gray-900">Saved Addresses</h2>
         <button 
           onClick={() => setShowForm(!showForm)}
-          className="bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-lg transition-colors font-bold flex items-center gap-2"
+          className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg transition-all font-bold flex items-center gap-2 shadow-md shadow-purple-200"
         >
           <Plus className="w-5 h-5" />
           Add New Address
