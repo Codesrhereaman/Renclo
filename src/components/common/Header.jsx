@@ -212,8 +212,8 @@ export default function Header() {
           MOBILE FULL-WIDTH SEARCH OVERLAY
           ───────────────────────────────────────────────────────────── */}
       {isMobileSearchOpen && (
-        <div className="md:hidden absolute inset-0 h-[100dvh] bg-white z-[80] flex flex-col animate-in fade-in slide-in-from-top-4 duration-300">
-          <div className="px-4 py-3 pt-safe flex items-center gap-3 border-b border-gray-100 bg-white">
+        <div className="md:hidden fixed inset-0 h-[100dvh] bg-white z-[80] flex flex-col animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="px-4 py-3 flex items-center gap-3 border-b border-gray-100 bg-white flex-shrink-0">
             <div className="relative flex-1">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input 
@@ -250,7 +250,7 @@ export default function Header() {
       {/* ─────────────────────────────────────────────────────────────
           MAIN NAVBAR
           ───────────────────────────────────────────────────────────── */}
-      <nav className="container mx-auto px-4 md:px-6 py-3.5 flex justify-between items-center relative">
+      <nav className="container mx-auto px-4 md:px-6 py-3.5 flex justify-between items-center">
         
         {/* Logo */}
         <NavLink to="/" className="flex items-center gap-2.5 group shrink-0">
@@ -263,7 +263,7 @@ export default function Header() {
         </NavLink>
 
         {/* Desktop Primary Links */}
-        <div className="hidden md:flex gap-8 items-center absolute left-1/2 -translate-x-1/2">
+        <div className="hidden md:flex gap-6 lg:gap-8 items-center flex-1 justify-center">
           <NavLink to="/" end className={navLinkClass}>Home</NavLink>
           <NavLink to="/discover" className={navLinkClass}>Discover</NavLink>
           <NavLink to="/rentals" className={navLinkClass}>Rent Clothes</NavLink>
@@ -271,10 +271,10 @@ export default function Header() {
         </div>
 
         {/* Right Side Tools */}
-        <div className="flex items-center gap-1 sm:gap-4 ml-auto lg:ml-0">
+        <div className="flex items-center gap-2 sm:gap-4 ml-auto">
           
           {/* Desktop Search Bar */}
-          <div className="hidden lg:flex relative w-64 xl:w-80" ref={searchRef}>
+          <div className="hidden xl:flex relative w-64 xl:w-80" ref={searchRef}>
             <div className="relative group/search">
               <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] transition-colors ${isSearchFocused ? 'text-purple-500' : 'text-gray-400'}`} />
               <input 
@@ -301,7 +301,7 @@ export default function Header() {
           {/* Mobile Search Trigger */}
           <button
             onClick={() => setIsMobileSearchOpen(true)}
-            className="lg:hidden p-2.5 hover:bg-slate-100 rounded-full transition active:scale-95"
+            className="xl:hidden p-2.5 hover:bg-slate-100 rounded-full transition active:scale-95"
             aria-label="Search"
           >
             <Search className="w-[22px] h-[22px] text-gray-800" />
@@ -370,7 +370,7 @@ export default function Header() {
       {/* Dimmed Background Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-gray-900/60 z-[90] backdrop-blur-sm transition-opacity duration-300 md:hidden animate-in fade-in"
+          className="fixed inset-0 bg-gray-900/60 z-[85] backdrop-blur-sm transition-opacity duration-300 md:hidden animate-in fade-in"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -378,11 +378,11 @@ export default function Header() {
       {/* Drawer Panel */}
       <div 
         ref={drawerRef}
-        className={`fixed inset-y-0 right-0 w-[85%] max-w-[340px] bg-white z-[100] shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] flex flex-col md:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-screen w-[85%] max-w-[340px] bg-white z-[90] shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] flex flex-col md:hidden overflow-hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between p-5 pb-4 border-b border-gray-100">
-          <div className="flex items-center gap-2 pt-safe">
+        <div className="flex items-center justify-between p-5 pb-4 border-b border-gray-100 flex-shrink-0">
+          <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center shadow-sm">
               <span className="text-white font-bold text-base">W</span>
             </div>
@@ -390,14 +390,14 @@ export default function Header() {
           </div>
           <button 
             onClick={() => setIsOpen(false)} 
-            className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 active:scale-95 transition-colors pt-safe-offset"
+            className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 active:scale-95 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Drawer Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-5 py-6 space-y-8 flex flex-col hide-scrollbar">
+        <div className="flex-1 overflow-y-auto px-5 py-6 space-y-8 flex flex-col hide-scrollbar pb-safe">
           
           {/* Auth Display in Drawer */}
           {user ? (

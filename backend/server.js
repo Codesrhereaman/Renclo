@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 
 const { initFirebase } = require('./config/firebase');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
+const { validateCloudinaryConfig } = require('./services/cloudinaryService');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -16,10 +17,21 @@ const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const virtualClosetRoutes = require('./routes/virtualClosetRoutes');
 
 // ─── Initialize Firebase ──────────────────────────────────────────────────────
 
 initFirebase();
+
+// ─── Validate Cloudinary Config ──────────────────────────────────────────────
+
+const { isValid: cloudinaryConfigValid, missing: missingCloudinaryVars } = validateCloudinaryConfig();
+if (!cloudinaryConfigValid) {
+  console.warn(`⚠️  Cloudinary: Missing credentials (${missingCloudinaryVars.join(', ')})`);
+  console.warn(`   → Image uploads will fail until these env vars are configured.`);
+} else {
+  console.log('✅ Cloudinary: Configuration valid');
+}
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
@@ -83,18 +95,20 @@ app.get('/', (req, res) => {
       cart:     'GET /api/cart                |  POST /api/cart/add',
       wishlist: 'GET /api/wishlist            |  POST /api/wishlist/toggle',
       orders:   'POST /api/orders             |  GET /api/orders',
+      closet:   'POST /api/virtual-closet/upload  |  GET /api/virtual-closet  |  DELETE /api/virtual-closet/:lookId',
     },
   });
 });
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
-app.use('/api/auth',      authRoutes);
-app.use('/api/users',     userRoutes);
-app.use('/api/products',  productRoutes);
-app.use('/api/cart',      cartRoutes);
-app.use('/api/wishlist',  wishlistRoutes);
-app.use('/api/orders',    orderRoutes);
+app.use('/api/auth',           authRoutes);
+app.use('/api/users',          userRoutes);
+app.use('/api/products',       productRoutes);
+app.use('/api/cart',           cartRoutes);
+app.use('/api/wishlist',       wishlistRoutes);
+app.use('/api/orders',         orderRoutes);
+app.use('/api/virtual-closet', virtualClosetRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 

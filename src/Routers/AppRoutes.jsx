@@ -34,6 +34,10 @@ const OrderSuccess     = lazy(() => import("../pages/OrderSuccess"));
 
 const OwnerDashboard   = lazy(() => import("../pages/OwnerDashboard"));
 
+// ─── Testing / Development ───────────────────────────────────────────────────
+
+const ImageUploadTest  = lazy(() => import("../pages/ImageUploadTest"));
+
 // ─── Fullscreen Suspense loader ───────────────────────────────────────────────
 
 function PageLoader() {
@@ -110,6 +114,11 @@ export default function AppRoutes() {
               <ProtectedRoute roles={['owner', 'admin']}>
                 <OwnerDashboard />
               </ProtectedRoute>
+            } />
+
+            {/* ── Testing / Development ────────────────────────── */}
+            <Route path="/test/image-upload" element={
+              <ProtectedRoute><ImageUploadTest /></ProtectedRoute>
             } />
           </Routes>
         </Suspense>

@@ -6,6 +6,7 @@ const COLLECTIONS = {
   CARTS: 'carts',
   WISHLISTS: 'wishlists',
   REVIEWS: 'reviews',
+  VIRTUAL_CLOSET: 'virtual_closet',
 };
 
 module.exports = COLLECTIONS;
