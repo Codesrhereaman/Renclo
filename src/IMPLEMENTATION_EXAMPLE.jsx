@@ -179,7 +179,7 @@ async function advancedUploadExample(file, userId) {
      userId: "user123",
      createdAt: timestamp,
      updatedAt: timestamp,
-     publicId: "wardrowave/abc123",
+     publicId: "renclo/abc123",
      width: 1200,
      height: 800,
      format: "jpg",

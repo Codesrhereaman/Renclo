@@ -105,7 +105,7 @@ Return to Frontend
     "occasion": "Summer",
     "image": {
       "secure_url": "https://res.cloudinary.com/...",
-      "public_id": "wardrowave/..."
+      "public_id": "renclo/..."
     },
     "tags": ["Beach"],
     "isAIMatched": true,

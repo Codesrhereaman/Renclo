@@ -85,7 +85,7 @@ export default function Discover() {
             Discover Real <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">AI Styles</span>
           </h1>
           <p className="text-lg text-gray-500 font-medium">
-            See how the WardroWave community is rocking their AI-curated rental outfits in the real world.
+            See how the Renclo community is rocking their AI-curated rental outfits in the real world.
           </p>
         </FadeIn>
 

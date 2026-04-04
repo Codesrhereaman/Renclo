@@ -99,7 +99,7 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400 rounded-[32px] blur-3xl opacity-30 mix-blend-multiply"></div>
             <img 
               src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&h=800&fit=crop&q=80" 
-              alt="Premium Fashion Rental - WardroWave"
+              alt="Premium Fashion Rental - Renclo"
               className="relative w-full h-full object-cover rounded-[32px] shadow-2xl z-10"
               loading="eager"
             />

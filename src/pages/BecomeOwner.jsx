@@ -132,7 +132,7 @@ export default function BecomeOwner() {
             Why Partner With Us?
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            WardroWave provides everything you need to earn from your wardrobe safely and efficiently
+            Renclo provides everything you need to earn from your wardrobe safely and efficiently
           </p>
         </div>
 

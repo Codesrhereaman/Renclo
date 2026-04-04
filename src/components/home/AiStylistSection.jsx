@@ -43,7 +43,7 @@ export default function AiStylistSection() {
                 </span>
               </h2>
               <p className="ai-stylist-desc text-sm md:text-lg text-slate-600 font-medium mb-6 md:mb-10 leading-relaxed">
-                Gone are the days of endless scrolling. WardroWave's deeply integrated AI Stylist acts as your personal fashion curator—analyzing your preferences, body type, and the event you're attending to stitch together the ultimate lookbook.
+                Gone are the days of endless scrolling. Renclo's deeply integrated AI Stylist acts as your personal fashion curator—analyzing your preferences, body type, and the event you're attending to stitch together the ultimate lookbook.
               </p>
 
               <div className="space-y-4 md:space-y-6">

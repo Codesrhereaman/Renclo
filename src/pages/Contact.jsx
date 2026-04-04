@@ -55,7 +55,7 @@ export default function Contact() {
             allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="WardroWave Location"
+            title="Renclo Location"
           ></iframe>
         </div>
       </div>

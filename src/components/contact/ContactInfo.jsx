@@ -5,7 +5,7 @@ export default function ContactInfo() {
     {
       icon: Mail,
       title: 'Email',
-      info: 'support@WardroWave.com',
+      info: 'support@Renclo.com',
       subtext: "We'll respond within 24 hours",
       bgColor: 'bg-purple-100',
       iconColor: 'text-purple-600'

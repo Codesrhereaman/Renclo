@@ -1,5 +1,5 @@
 // src/config/firebase.js
-// Firebase SDK configuration for WardroWave
+// Firebase SDK configuration for Renclo
 
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
@@ -8,13 +8,13 @@ import { getStorage } from 'firebase/storage';
 import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyCgOBfDTfO13kQAnyQGXNeMg_OY1GpqRko",
-  authDomain:        "wardrowave.firebaseapp.com",
-  projectId:         "wardrowave",
-  storageBucket:     "wardrowave.firebasestorage.app",
-  messagingSenderId: "1092423491775",
-  appId:             "1:1092423491775:web:6e60acd1a1fdcf1885e60a",
-  measurementId:     "G-5MWLTNY8H4",
+  apiKey:            "AIzaSyBgcJhEUOLavW4EB2K0RNL-zLOxA40B12Y",
+  authDomain:        "renclo.firebaseapp.com",
+  projectId:         "renclo",
+  storageBucket:     "renclo.firebasestorage.app",
+  messagingSenderId: "789572216822",
+  appId:             "1:789572216822:web:9992c6f7fe469c28fe49d7",
+  measurementId:     "G-3N5VLX7HLZ",
 };
 
 const app = initializeApp(firebaseConfig);

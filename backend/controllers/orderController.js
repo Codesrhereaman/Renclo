@@ -75,7 +75,7 @@ const createOrder = asyncHandler(async (req, res) => {
       size: item.size || '',
       itemTotal,
       status: 'pending',
-      ownerId: p.owner || 'WardroWave',
+      ownerId: p.owner || 'Renclo',
     };
   }).filter(Boolean);
 

@@ -189,7 +189,7 @@ export default function Signup() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 Create Account
               </h1>
-              <p className="text-gray-600">Join WardroWave today</p>
+              <p className="text-gray-600">Join Renclo today</p>
             </div>
 
             {/* General Error Message */}

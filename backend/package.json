@@ -1,7 +1,7 @@
 {
-  "name": "wardrowave-backend",
+  "name": "renclo-backend",
   "version": "1.0.0",
-  "description": "Backend API for WardroWave - Firebase Auth + Firestore",
+  "description": "Backend API for Renclo - Firebase Auth + Firestore",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {

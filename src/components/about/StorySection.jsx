@@ -29,7 +29,7 @@ export default function StorySection() {
             Redefining <span className="text-gradient">Style</span> Through Circulation
           </h2>
           <p className="text-slate-600 text-lg md:text-xl font-medium leading-relaxed">
-            WardroWave was born from a simple yet powerful observation: our closets are full of untapped value, while our desire for fresh style is constant. 
+            Renclo was born from a simple yet powerful observation: our closets are full of untapped value, while our desire for fresh style is constant. 
           </p>
         </div>
         

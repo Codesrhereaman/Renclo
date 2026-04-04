@@ -1,6 +1,6 @@
 # Cloudinary Image Upload Integration Guide
 
-This guide shows how to use the image upload features in your WardroWave application.
+This guide shows how to use the image upload features in your Renclo application.
 
 ## 1. Setup Cloudinary Account
 
@@ -24,7 +24,7 @@ VITE_FIRESTORE_IMAGES_COLLECTION=images
 
 Replace:
 - `your_cloud_name_here` → Your Cloudinary Cloud Name (e.g., "dj5xyz1a9")
-- `your_upload_preset_here` → Your unsigned upload preset name (e.g., "wardrowave_upload")
+- `your_upload_preset_here` → Your unsigned upload preset name (e.g., "renclo_upload")
 
 ## 3. Usage Examples
 

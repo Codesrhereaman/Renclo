@@ -11,7 +11,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg">W</span>
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">WardroWave</span>
+              <span className="text-xl font-bold text-white tracking-tight">Renclo</span>
             </div>
             <p className="text-gray-400 mb-6 text-sm md:text-base leading-relaxed">
               Your ultimate destination for premium fashion and style.
@@ -50,12 +50,12 @@ export default function Footer() {
           <div className="w-full">
             <h4 className="text-white font-bold mb-4 md:mb-6 uppercase tracking-wider text-sm">Contact Info</h4>
             <div className="space-y-4 md:space-y-6">
-              <a href="mailto:support.wardrowave@gmail.com" className="group flex items-start gap-4 hover:bg-gray-800/50 p-2 md:p-0 -ml-2 md:ml-0 rounded-lg transition">
+              <a href="mailto:support.renclo@gmail.com" className="group flex items-start gap-4 hover:bg-gray-800/50 p-2 md:p-0 -ml-2 md:ml-0 rounded-lg transition">
                 <div className="mt-1 p-2 bg-gray-800 group-hover:bg-gray-700 rounded-lg transition flex-shrink-0">
                   <Mail className="w-4 h-4 text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm md:text-base text-gray-300 group-hover:text-purple-300 transition leading-tight">support.wardrowave@gmail.com</p>
+                  <p className="text-sm md:text-base text-gray-300 group-hover:text-purple-300 transition leading-tight">support.renclo@gmail.com</p>
                   <p className="text-xs text-gray-500 mt-1">We reply within 24 hours</p>
                 </div>
               </a>
@@ -79,7 +79,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-8 pb-16 md:pb-8">
           <div className="flex flex-col-reverse md:flex-row justify-between items-center text-center gap-6 md:gap-4">
             <p className="text-gray-500 text-xs md:text-sm order-2 md:order-1">
-              &copy; 2025 WardroWave. All rights reserved.
+              &copy; 2025 Renclo. All rights reserved.
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-2 sm:gap-6 text-xs md:text-sm order-1 md:order-2 w-full md:w-auto">
               <a href="/privacy" className="py-3 sm:py-2 md:py-0 px-4 sm:px-0 text-gray-400 hover:text-purple-400 transition min-h-[44px] md:min-h-0 flex items-center justify-center bg-gray-800/50 sm:bg-transparent rounded-lg sm:rounded-none">Privacy Policy</a>

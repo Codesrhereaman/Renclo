@@ -18,7 +18,7 @@ export default function TeamCards() {
       name: 'Ananya Gupta', 
       role: 'Marketing Lead', 
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop&q=80',
-      bio: 'Growth strategist bringing WardroWave to millions nationwide.'
+      bio: 'Growth strategist bringing Renclo to millions nationwide.'
     },
     { 
       name: 'Vikram Singh', 

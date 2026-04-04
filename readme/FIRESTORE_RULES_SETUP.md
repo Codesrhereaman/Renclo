@@ -20,12 +20,12 @@ This opens a browser and authenticates you with your Firebase account.
 
 ### Step 3: Initialize Firebase in your project (if not done)
 ```bash
-cd c:\Users\patha\OneDrive\Desktop\clothrental\WardroWave2.0
+cd c:\Users\patha\OneDrive\Desktop\clothrental\Renclo2.0
 firebase init
 ```
 When prompted:
 - Select: **Firestore** 
-- Choose your existing **wardrowave** project
+- Choose your existing **renclo** project
 - Use default file names (firestore.rules and firestore.indexes.json)
 
 ### Step 4: Deploy the Rules
@@ -80,13 +80,13 @@ The security rules in `firestore.rules` allow:
    - You should see:
    ```
    📤 Starting upload for user {uid}
-   ✅ Cloudinary upload complete: wardrowave/virtual-closet/...
+   ✅ Cloudinary upload complete: renclo/virtual-closet/...
    📝 Preparing Firestore write for collection: users/{uid}/virtual_closet
    ✅ Firestore document created with ID: {docId}
    ```
 
 5. **Verify in Firestore Console:**
-   - Go to [Firebase Console](https://console.firebase.google.com) → wardrowave project
+   - Go to [Firebase Console](https://console.firebase.google.com) → renclo project
    - Firestore → Database → Collection: `users` → Your UID → Collection: `virtual_closet`
    - You should see the document with metadata
 

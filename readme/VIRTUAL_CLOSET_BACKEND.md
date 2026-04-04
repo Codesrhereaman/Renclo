@@ -71,7 +71,7 @@ Should see:
 
 ```
 ══════════════════════════════════════════════
-  🌊 WardroWave Backend  —  v2.0.0
+  🌊 Renclo Backend  —  v2.0.0
 ══════════════════════════════════════════════
   🚀 Server:    http://localhost:5000
   🔥 Database:  Firebase Firestore
@@ -142,7 +142,7 @@ Response:
     "occasion": "New Upload",
     "image": {
       "secure_url": "https://res.cloudinary.com/...",
-      "public_id": "wardrowave/virtual-closet/...",
+      "public_id": "renclo/virtual-closet/...",
       "width": 1000,
       "height": 1500
     },
@@ -238,7 +238,7 @@ Response:
   tags: ["Relaxed", "Beach"],
   image: {
     secure_url: "https://res.cloudinary.com/...",
-    public_id: "wardrowave/virtual-closet/123456",
+    public_id: "renclo/virtual-closet/123456",
     width: 1000,
     height: 1500,
     bytes: 523456,

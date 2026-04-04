@@ -1,6 +1,6 @@
-# WardroWave 2.0: Project Flow & Architecture
+# Renclo 2.0: Project Flow & Architecture
 
-WardroWave 2.0 is a premium clothing rental and e-commerce platform built with a modern full-stack architecture. This document outlines the project's flow, technology stack, and core logic.
+Renclo 2.0 is a premium clothing rental and e-commerce platform built with a modern full-stack architecture. This document outlines the project's flow, technology stack, and core logic.
 
 ---
 
@@ -71,7 +71,7 @@ Every request to `/api/*` goes through:
 
 ## 🔐 Authentication & Security Flow
 
-WardroWave uses a hybrid Firebase authentication strategy:
+Renclo uses a hybrid Firebase authentication strategy:
 
 1.  **Frontend**: User logs in via Firebase Client SDK.
 2.  **Token Exchange**: The client sends the Firebase ID Token to the backend.

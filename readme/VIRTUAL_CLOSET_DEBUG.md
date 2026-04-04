@@ -26,7 +26,7 @@ npm run dev
 
 Should show:
 ```
-🌊 WardroWave Backend  —  v2.0.0
+🌊 Renclo Backend  —  v2.0.0
 🚀 Server:    http://localhost:5000
 ```
 
@@ -101,7 +101,7 @@ npm run dev
 curl http://localhost:5000/health
 
 # Should respond with:
-# {"success": true, "message": "🚀 WardroWave API is running", ...}
+# {"success": true, "message": "🚀 Renclo API is running", ...}
 ```
 
 ### Step 2: Verify Authentication

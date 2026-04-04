@@ -24,7 +24,7 @@ Your `.env` file contained sensitive credentials and was committed to the reposi
 1. **Go to Vercel Dashboard:**
    - https://vercel.com/dashboard
 
-2. **Select your project:** `wardrowave` (or create new)
+2. **Select your project:** `renclo` (or create new)
 
 3. **Go to Settings → Environment Variables**
 
@@ -35,8 +35,8 @@ Your `.env` file contained sensitive credentials and was committed to the reposi
 | `PORT` | `5000` |
 | `NODE_ENV` | `production` |
 | `FRONTEND_URL` | `https://your-vercel-domain.vercel.app` |
-| `FIREBASE_PROJECT_ID` | `wardrowave` |
-| `FIREBASE_CLIENT_EMAIL` | `firebase-adminsdk-fbsvc@wardrowave.iam.gserviceaccount.com` |
+| `FIREBASE_PROJECT_ID` | `renclo` |
+| `FIREBASE_CLIENT_EMAIL` | `firebase-adminsdk-fbsvc@renclo.iam.gserviceaccount.com` |
 | `FIREBASE_PRIVATE_KEY` | Paste your private key (with newlines) |
 | `CLOUDINARY_CLOUD_NAME` | `doiyd6zkx` |
 | `CLOUDINARY_API_KEY` | Your API key |

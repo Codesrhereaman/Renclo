@@ -174,7 +174,7 @@ users/{uid}/virtual_closet/{lookId}
   tags: ["Beach", "Relaxed"],
   image: {
     secure_url: "https://res.cloudinary.com/...",
-    public_id: "wardrowave/virtual-closet/...",
+    public_id: "renclo/virtual-closet/...",
     width: 1000,
     height: 1500,
     bytes: 234567,
@@ -322,4 +322,4 @@ npm run dev
 
 ---
 
-**Built with care for WardroWave 👗✨**
+**Built with care for Renclo 👗✨**

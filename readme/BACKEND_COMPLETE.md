@@ -68,7 +68,7 @@ Response: 201 Created
   "occasion": "Summer Getaway",
   "image": {
     "secure_url": "https://res.cloudinary.com/...",
-    "public_id": "wardrowave/virtual-closet/...",
+    "public_id": "renclo/virtual-closet/...",
     "width": 1000,
     "height": 1500,
     "bytes": 234567,
@@ -446,4 +446,4 @@ The Virtual Closet backend is complete and production-ready.
 
 ---
 
-**Built with ❤️ for WardroWave**
+**Built with ❤️ for Renclo**

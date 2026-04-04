@@ -46,7 +46,7 @@ export default function WhyChooseSection() {
       
       <div className="text-center mb-20 relative z-10 animate-fade-in">
         <h2 className="section-title text-4xl md:text-5xl font-black text-slate-900 mb-6 px-4">
-          Why Choose <span className="text-gradient">WardroWave?</span>
+          Why Choose <span className="text-gradient">Renclo?</span>
         </h2>
         <p className="text-slate-600 text-lg md:text-xl font-medium max-w-2xl mx-auto">
           We have engineered every touchpoint to ensure your fashion journey is as effortless as it is exquisite.

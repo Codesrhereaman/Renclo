@@ -42,7 +42,7 @@ export default function About() {
               The <span className="text-gradient">Future</span> of Fashion
             </h1>
             <p className="text-lg md:text-2xl text-slate-600 max-w-3xl mx-auto font-bold leading-relaxed">
-              WardroWave is a community-driven luxury rental ecosystem, where world-class style meets responsible consumption.
+              Renclo is a community-driven luxury rental ecosystem, where world-class style meets responsible consumption.
             </p>
           </div>
         </div>

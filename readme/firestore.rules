@@ -1,4 +1,4 @@
-// Firestore Security Rules for WardroWave
+// Firestore Security Rules for Renclo
 // Deploy these rules to Firebase Console → Firestore → Rules
 // Command: firebase deploy --only firestore:rules
 

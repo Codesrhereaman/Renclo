@@ -4,7 +4,7 @@ import GSAPReveal from '../animations/GSAPReveal';
 
 const testimonials = [
   {
-    text: "I rented a designer Lehenga for my sister's wedding. It arrived in pristine condition, fit perfectly, and saved me over ₹45,000. WardroWave is a lifesaver!",
+    text: "I rented a designer Lehenga for my sister's wedding. It arrived in pristine condition, fit perfectly, and saved me over ₹45,000. Renclo is a lifesaver!",
     name: "Priya Sharma",
     role: "Bride's Sister",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
@@ -18,7 +18,7 @@ const testimonials = [
     rating: 5,
   },
   {
-    text: "Listing my unused designer sarees on WardroWave has been amazing. The platform handles the logistics, and I've already made enough passive income to buy new outfits!",
+    text: "Listing my unused designer sarees on Renclo has been amazing. The platform handles the logistics, and I've already made enough passive income to buy new outfits!",
     name: "Ananya Patel",
     role: "Lender / Fashion Blogger",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",

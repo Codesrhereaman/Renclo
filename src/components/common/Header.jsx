@@ -258,7 +258,7 @@ export default function Header() {
             <span className="text-white font-bold text-lg md:text-xl">W</span>
           </div>
           <span className="logo-text text-[22px] md:text-2xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent tracking-tight hidden sm:block">
-            WardroWave
+            Renclo
           </span>
         </NavLink>
 
@@ -420,7 +420,7 @@ export default function Header() {
             </div>
           ) : (
             <div className="bg-gray-50 p-5 rounded-[20px] border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-1">Welcome to WardroWave</h3>
+              <h3 className="font-bold text-gray-900 mb-1">Welcome to Renclo</h3>
               <p className="text-[12px] text-gray-500 mb-4 font-medium">Sign in to save favorites and track orders.</p>
               <div className="flex gap-2">
                 <button onClick={() => { navigate('/login'); setIsOpen(false); }} className="flex-1 py-2.5 bg-white border border-gray-200 text-gray-800 rounded-xl font-bold text-[13px] active:scale-95 shadow-sm">Log In</button>
