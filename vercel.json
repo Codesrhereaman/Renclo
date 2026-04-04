@@ -16,6 +16,29 @@
     "FRONTEND_URL"
   ],
   
+  "experimentalServices": {
+    "frontend": {
+      "name": "renclo-frontend",
+      "routePrefix": "/",
+      "framework": "vite",
+      "build": {
+        "src": ".",
+        "cmd": "npm run build",
+        "dir": "dist"
+      }
+    },
+    "backend": {
+      "name": "renclo-backend",
+      "entrypoint": "api/index.js",
+      "routePrefix": "/api",
+      "runtime": "nodejs20.x",
+      "build": {
+        "src": "backend",
+        "cmd": "npm install"
+      }
+    }
+  },
+  
   "builds": [
     {
       "src": "package.json",
