@@ -1,9 +1,11 @@
 // ─── Global Error Handler ─────────────────────────────────────────────────────
+// Handles all async errors and formats error responses
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
 
+  // Log errors in development
   if (process.env.NODE_ENV === 'development') {
     console.error(`[${new Date().toISOString()}] ERROR:`, err);
   }
