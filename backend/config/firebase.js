@@ -25,12 +25,23 @@ const initFirebase = () => {
   }
 
   try {
+    // Handle private key formatting for Vercel
+    // Vercel env vars: key has literal "\\n" that needs converting to actual newlines
+    // Local .env: key already has actual newlines (with escape sequences)
+    let formattedKey = FIREBASE_PRIVATE_KEY;
+    if (formattedKey.includes('\\n')) {
+      // From Vercel (escaped backslash-n)
+      formattedKey = formattedKey.replace(/\\n/g, '\n');
+    } else if (!formattedKey.includes('\n')) {
+      // Key might be mangled, log error
+      console.error('⚠️  Firebase private key format issue detected');
+    }
+    
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: FIREBASE_PROJECT_ID,
         clientEmail: FIREBASE_CLIENT_EMAIL,
-        // Replace escaped newlines (needed when stored in .env)
-        privateKey: FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        privateKey: formattedKey,
       }),
     });
 

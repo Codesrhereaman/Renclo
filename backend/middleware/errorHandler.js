@@ -8,16 +8,19 @@ const errorHandler = (err, req, res, next) => {
     console.error(`[${new Date().toISOString()}] ERROR:`, err);
   }
 
-  // Firebase Admin errors
-  if (err.code?.startsWith('auth/')) {
+  // Firebase Admin errors (err.code can be string or number)
+  if (typeof err.code === 'string' && err.code.startsWith('auth/')) {
     statusCode = 401;
     message = 'Authentication error: ' + err.message;
   }
-
-  // Firestore errors
-  if (err.code === 5) { statusCode = 404; message = 'Document not found'; }
-  if (err.code === 6) { statusCode = 409; message = 'Document already exists'; }
-  if (err.code === 7) { statusCode = 403; message = 'Permission denied'; }
+  
+  // Handle Firebase/Firestore numeric error codes
+  if (typeof err.code === 'number') {
+    if (err.code === 16) { statusCode = 401; message = 'Authentication failed: Invalid credentials'; }
+    if (err.code === 5) { statusCode = 404; message = 'Document not found'; }
+    if (err.code === 6) { statusCode = 409; message = 'Document already exists'; }
+    if (err.code === 7) { statusCode = 403; message = 'Permission denied'; }
+  }
 
   res.status(statusCode).json({
     success: false,
