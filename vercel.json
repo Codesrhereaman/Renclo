@@ -3,42 +3,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install && cd backend && npm install && cd ..",
-  
-  "env": {
-    "NODE_ENV": "production"
-  },
-  
-  "envPrefix": [
-    "FIREBASE_",
-    "CLOUDINARY_",
-    "RATE_LIMIT_",
-    "PORT",
-    "FRONTEND_URL"
-  ],
-  
-  "experimentalServices": {
-    "frontend": {
-      "name": "renclo-frontend",
-      "routePrefix": "/",
-      "framework": "vite",
-      "build": {
-        "src": ".",
-        "cmd": "npm run build",
-        "dir": "dist"
-      }
-    },
-    "backend": {
-      "name": "renclo-backend",
-      "entrypoint": "api/index.js",
-      "routePrefix": "/api",
-      "runtime": "nodejs20.x",
-      "build": {
-        "src": "backend",
-        "cmd": "npm install"
-      }
-    }
-  },
-  
   "builds": [
     {
       "src": "package.json",
@@ -51,51 +15,43 @@
       "src": "api/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "backend/**"
+        "includeFiles": "backend/**",
+        "maxDuration": 30
       }
     }
   ],
-  
   "routes": [
     {
-      "src": "/api/auth/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/auth/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/users/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/users/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/products/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/products/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/cart/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/cart/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/orders/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/orders/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/wishlist/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/wishlist/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/virtual-closet/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/virtual-closet/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/api/.*",
-      "dest": "/api/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
     },
     {
       "src": "/(.*\\..*)",
@@ -106,7 +62,6 @@
       "dest": "/dist/index.html"
     }
   ],
-  
   "headers": [
     {
       "source": "/api/(.*)",
@@ -114,28 +69,17 @@
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
         }
       ]
     },
     {
-      "source": "/(.*)",
+      "source": "/dist/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, immutable"
+          "value": "public, max-age=31536000, immutable"
         }
       ]
-    }
-  ],
-  
-  "crons": [
-    {
-      "path": "/api/health",
-      "schedule": "0 */6 * * *"
     }
   ]
 }
