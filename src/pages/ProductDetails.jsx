@@ -10,6 +10,7 @@ import { useCart } from '../context api/CartContext';
 import CompleteTheLook from '../components/products/CompleteTheLook';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
+import { RENTAL_ITEMS } from '../data/productsData';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -28,16 +29,35 @@ export default function ProductDetails() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
+        
+        // First, try to find product locally in RENTAL_ITEMS
+        const localProduct = RENTAL_ITEMS.find(p => p.id === parseInt(id) || p.id === id);
+        if (localProduct) {
+          setProduct(localProduct);
+          setLoading(false);
+          return;
+        }
+        
+        // If not found locally, try to fetch from API
         const res = await api.product.getById(id);
         if (res.data?.product) {
           setProduct(res.data.product);
+        } else if (res.product) {
+          setProduct(res.product);
         } else {
           toast.error("Product not found");
           navigate('/rentals');
         }
       } catch (err) {
-        toast.error("Failed to load product details");
-        navigate('/rentals');
+        console.error('Product fetch error:', err);
+        // Check one more time if product exists locally before showing error
+        const localProduct = RENTAL_ITEMS.find(p => p.id === parseInt(id) || p.id === id);
+        if (localProduct) {
+          setProduct(localProduct);
+        } else {
+          toast.error("Failed to load product details");
+          navigate('/rentals');
+        }
       } finally {
         setLoading(false);
       }
@@ -67,12 +87,26 @@ export default function ProductDetails() {
             
             {/* Left: Image Gallery */}
             <FadeIn delay={0.1}>
-              <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg aspect-[4/5] lg:aspect-auto lg:h-[600px] border border-gray-100">
+              <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg border border-gray-100 flex items-center justify-center w-full" style={{ height: '600px' }}>
                 <img 
                   src={product.image || product.images?.[0]?.url} 
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain p-4"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling && (e.target.nextElementSibling.style.display = 'flex');
+                  }}
                 />
+                {/* Fallback background if image fails */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center"
+                  style={{ display: 'none' }}
+                >
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">🛍️</div>
+                    <p className="text-gray-500 font-medium">Image not available</p>
+                  </div>
+                </div>
                 {!product.inStock && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center backdrop-blur-sm">
                     <span className="text-white font-bold text-2xl tracking-wide px-6 py-3 border-2 border-white rounded-xl">Currently Rented</span>
@@ -80,7 +114,7 @@ export default function ProductDetails() {
                 )}
                 <button 
                   onClick={() => toggleWishlist(product)}
-                  className="absolute top-6 right-6 p-3 bg-white/90 backdrop-blur rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-300"
+                  className="absolute top-6 right-6 p-3 bg-white/90 backdrop-blur rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-300 z-10"
                 >
                   <Heart className={`w-6 h-6 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                 </button>

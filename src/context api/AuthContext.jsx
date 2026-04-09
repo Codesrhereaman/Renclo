@@ -37,6 +37,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showGenderModal, setShowGenderModal] = useState(false);
 
   // Listen to Firebase Auth state
   useEffect(() => {
@@ -45,7 +46,12 @@ export function AuthProvider({ children }) {
         try {
           // Fetch our DB profile to get roles and addresses
           const res = await api.auth.getMe();
-          setUser(res.data.user);
+          if (res && res.data && res.data.user) {
+            setUser(res.data.user);
+          } else {
+            console.warn('Invalid user response from getMe:', res);
+            setUser(null);
+          }
         } catch (error) {
           console.error('Error fetching user profile:', error);
           setUser(null);

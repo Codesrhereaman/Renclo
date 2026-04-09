@@ -25,16 +25,33 @@ const request = async (method, endpoint, body = null) => {
 
   try {
     const res = await fetch(`${BASE_URL}${endpoint}`, config);
-    const data = await res.json();
+    
+    // Check if response has content
+    const contentType = res.headers.get('content-type');
+    let data = null;
+    
+    if (contentType && contentType.includes('application/json')) {
+      const text = await res.text();
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {
+          console.error('JSON parse error:', parseErr);
+          const err = new Error('Invalid JSON response from server');
+          err.status = res.status;
+          throw err;
+        }
+      }
+    }
 
     if (!res.ok) {
-      const err = new Error(data.message || `HTTP ${res.status}`);
+      const err = new Error(data?.message || `HTTP ${res.status}`);
       err.status = res.status;
       err.data = data;
       throw err;
     }
 
-    return data;
+    return data || { success: true };
   } catch (err) {
     if (err instanceof TypeError) {
       throw new Error('Cannot reach server. Is the backend running?');
@@ -54,6 +71,7 @@ export const authAPI = {
   // Call after Firebase signup/login to create/sync Firestore profile
   syncProfile:  (data)   => post('/auth/sync-profile', data),
   getMe:        ()       => get('/auth/me'),
+  updateGender: (data)   => post('/auth/update-gender', data),
   logout:       ()       => post('/auth/logout'),
   deleteAccount:()       => del('/auth/delete-account'),
 };
