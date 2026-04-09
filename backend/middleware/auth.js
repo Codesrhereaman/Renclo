@@ -36,6 +36,7 @@ const protect = async (req, res, next) => {
         fullName: decoded.name || decoded.email?.split('@')[0] || 'User',
         phone: decoded.phone_number || '',
         photoUrl: decoded.picture || '',
+        gender: null,
         role: 'user',
         isActive: true,
         authProvider: decoded.firebase?.sign_in_provider || 'password',

@@ -12,49 +12,55 @@ const getMe = asyncHandler(async (req, res) => {
 // Called after Firebase signup to create/merge Firestore profile
 
 const syncProfile = asyncHandler(async (req, res) => {
-  const db = getDB();
-  const { uid } = req.firebaseUser;
-  const { fullName, phone, photoUrl } = req.body;
+  try {
+    const db = getDB();
+    const { uid } = req.firebaseUser;
+    const { fullName, phone, photoUrl } = req.body;
 
-  const userRef = db.collection(COLLECTIONS.USERS).doc(uid);
-  const userDoc = await userRef.get();
+    const userRef = db.collection(COLLECTIONS.USERS).doc(uid);
+    const userDoc = await userRef.get();
 
-  if (!userDoc.exists) {
-    // First-time: create full profile
-    const profile = {
-      uid,
-      email: req.firebaseUser.email || '',
-      fullName: fullName || req.firebaseUser.name || req.firebaseUser.email?.split('@')[0] || 'User',
-      phone: phone || req.firebaseUser.phone_number || '',
-      photoUrl: photoUrl || req.firebaseUser.picture || '',
-      role: 'user',
-      isActive: true,
-      authProvider: req.firebaseUser.firebase?.sign_in_provider || 'password',
-      addresses: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    await userRef.set(profile);
+    if (!userDoc.exists) {
+      // First-time: create full profile
+      const profile = {
+        uid,
+        email: req.firebaseUser.email || '',
+        fullName: fullName || req.firebaseUser.name || req.firebaseUser.email?.split('@')[0] || 'User',
+        phone: phone || req.firebaseUser.phone_number || '',
+        photoUrl: photoUrl || req.firebaseUser.picture || '',
+        gender: null,
+        role: 'user',
+        isActive: true,
+        authProvider: (req.firebaseUser.firebase && req.firebaseUser.firebase.sign_in_provider) || 'password',
+        addresses: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      
+      // Use transaction to ensure atomicity
+      await db.runTransaction(async (transaction) => {
+        transaction.set(userRef, profile);
+        transaction.set(db.collection(COLLECTIONS.CARTS).doc(uid), { uid, items: [], updatedAt: new Date().toISOString() });
+        transaction.set(db.collection(COLLECTIONS.WISHLISTS).doc(uid), { uid, productIds: [], updatedAt: new Date().toISOString() });
+      });
 
-    // Create empty cart and wishlist for this user
-    await Promise.all([
-      db.collection(COLLECTIONS.CARTS).doc(uid).set({ uid, items: [], updatedAt: new Date().toISOString() }),
-      db.collection(COLLECTIONS.WISHLISTS).doc(uid).set({ uid, productIds: [], updatedAt: new Date().toISOString() }),
-    ]);
+      return res.status(201).json({ success: true, message: 'Profile created', data: { user: profile } });
+    }
 
-    return res.status(201).json({ success: true, message: 'Profile created', data: { user: profile } });
+    // Update only provided fields
+    const updates = { updatedAt: new Date().toISOString() };
+    if (fullName) updates.fullName = fullName;
+    if (phone !== undefined) updates.phone = phone;
+    if (photoUrl) updates.photoUrl = photoUrl;
+
+    await userRef.update(updates);
+    const updated = { ...userDoc.data(), ...updates };
+
+    res.status(200).json({ success: true, message: 'Profile synced', data: { user: updated } });
+  } catch (error) {
+    console.error('Sync profile error:', error);
+    throw error;
   }
-
-  // Update only provided fields
-  const updates = { updatedAt: new Date().toISOString() };
-  if (fullName) updates.fullName = fullName;
-  if (phone !== undefined) updates.phone = phone;
-  if (photoUrl) updates.photoUrl = photoUrl;
-
-  await userRef.update(updates);
-  const updated = { ...userDoc.data(), ...updates };
-
-  res.status(200).json({ success: true, message: 'Profile synced', data: { user: updated } });
 });
 
 // ─── POST /api/auth/logout ────────────────────────────────────────────────────

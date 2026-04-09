@@ -17,6 +17,8 @@ const RAW_PRODUCTS = eval(arrayStr);
 
 const PRODUCTS = RAW_PRODUCTS.map(item => ({
   name: item.name,
+  type: item.type || 'accessories',
+  color: item.color || 'Assorted',
   rentalPrice: item.rentalPrice,
   originalPrice: item.originalPrice || item.rentalPrice * 4,
   rating: item.rating,
@@ -25,7 +27,7 @@ const PRODUCTS = RAW_PRODUCTS.map(item => ({
   duration: item.duration || 3,
   images: item.images ? item.images : (item.image ? [{ url: item.image, isPrimary: true }] : []),
   inStock: item.inStock,
-  tags: [item.category, "fashion"]
+  tags: [item.category, item.type, item.color, "fashion"]
 }));
 
 const seed = async () => {
